@@ -6,6 +6,11 @@ Write project summary
 
 1. [Introduction](https://github.com/dssg/repo_name#introduction)
 2. [Installation and setup](https://github.com/dssg/repo_name#setup)
+3. [Partners](https://dssg.uchicago.edu/project/predicting-long-term-unemployment-in-continental-portugal/)
+4. [Code Example]
+5. [Tests]
+6. [Contributors]
+7. [License]
 
 ## Introduction
 
@@ -15,15 +20,15 @@ The Data Science for Social Good Fellowship is a summer program to train aspirin
 
 For three months they learn, hone, and apply their data science, analytical, and coding skills, collaborate in a fast-paced atmosphere, and learn from mentors coming from industry and academia.
 
-### Partners
-
-Introduce the partners of your project
-
-
 ## Installation and setup
 
 Provide setup instructions.
 If there are any specific hardware requirements, please specify here.
+
+### Partners
+
+IEFP (Instituto de Emprego e Formação Profissional) | Key Partner
+EAPN (European Anti-Poverty Network)
 
 ## Code Example
 
