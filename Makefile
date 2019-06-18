@@ -4,7 +4,9 @@
 # GLOBALS                                                                       #
 #################################################################################
 PROJECT_NAME = iefp
-VENV_DIR =  env
+VENV_DIR = env
+NOTEBOOK_DIR = notebooks
+
 PYTHON_INTERPRETER = $(VENV_DIR)/bin/python3
 PIP = $(VENV_DIR)/bin/pip
 
@@ -19,7 +21,6 @@ clean:
 	find . -type d -name "__pycache__" -delete
 
 jupyter:
-	@$(PYTHON_INTERPRETER) -m ipykernel install --sys-prefix --name=$(PROJECT_NAME)
 	@echo "Running jupyter notebook in background..."
 	@$(VENV_DIR)/bin/jupyter notebook --notebook-dir=$(NOTEBOOK_DIR)
 
@@ -32,6 +33,8 @@ endif
 ifneq ($(wildcard ./requirements.txt),)
 	$(PIP) install -r requirements.txt
 endif
+	@echo "Installing jupyter kernel..."
+	@$(PYTHON_INTERPRETER) -m ipykernel install --sys-prefix --name=$(PROJECT_NAME)
 
 ## Install virtual environment
 venv:
