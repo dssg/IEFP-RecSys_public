@@ -24,6 +24,9 @@ jupyter:
 	@echo "Running jupyter notebook in background..."
 	@$(VENV_DIR)/bin/jupyter notebook --notebook-dir=$(NOTEBOOK_DIR)
 
+lint:
+	@$(PYTHON_INTERPRETER) -m flake8 --max-line-length=90 ./src
+
 ## Install Python Dependencies
 requirements: venv
 	$(PIP) install -U pip setuptools wheel
