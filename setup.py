@@ -10,5 +10,6 @@ setup(
         "matplotlib>=3.1",
         "pandas>=0.23.4",
         "s3fs>=0.2.1",
+	"sqlalchemy==1.2.19",
     ],
 )
