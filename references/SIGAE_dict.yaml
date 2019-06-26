@@ -1,439 +1,438 @@
-SIGAE_DICT:
-  AC: AC
-  ACEITAR_BEC: ACCEPT_BEC
-  ACOMPANHADA: FOLLOW_UP
-  ADVERT_NOTIF: ADVERT_NOTIF
-  AFIRMATIVO: AFFIRMATIVE
-  AGREGADO_MONOPARENTAL: SINGLE_PARENT
-  ALEMAO: GERMAN
-  AMBITO: AMBITION
-  ANO_CONCLUSAO_CURSO: UNI_GRAD_YEAR
-  ANO_MES: YEAR_MONTH_DATE_STAMP
-  APOIO_ALOJAMENTO: HOUSING_SUPPORT
-  APRESENTACAO_DIRECTA: DIRECT_PRESENTATION
-  APRESENTACAO_QUINZENAL: BIWEEKLY_PRESENTATION
-  AREAS_CURSO: QUALIFICATION_AREA
-  AREA_CURSO: QUALIFICATION_AREA
-  AREA_FORMACAO: AREA_TRAINING
-  AREA_INTERVENCAO: INTERVENTION_AREA
-  AREA_RECRUTAMENTO: RECRIUTMENT_AREA
-  ASCENDENTES_A_CARGO: OLDER_DEPENDENTS
-  AUTORIZA_CONSULTA_ACORDO_SECT: CONSULTANCY_AGREEMENT
-  A_TEMPO: TIME
-  BDE_CAE: BDE_CAE
-  BDE_FREGUESIA: BDE_PARISH
-  BDE_NR_PESSOAS_SERVICO: BDE_NR_PERSONAL_SERVICE
-  CACCAO: CACCAO
-  CAE: CURRENT_RECENT_EMPLOYMENT
-  CAE_ANTERIOR: PREVIOUS_EMPLOYMENT
-  CAE_ANTERIOR_V2: PREVIOUS_EMPLOYMENT_V2
-  CAE_COLOCACAO: CAE_PLACEMENT
-  CAE_COLOCACAO_V2: CAE_PLACEMENT_V2
-  CAE_ENTIDADE: CAE_ENTITY
-  CAE_ENTIDADE_V2: CAE_ENTITY_V2
-  CAE_ETT: CAE_ETT
-  CAE_PRIORITARIA: CAE_PRIORITY
-  CAE_UTENTE: CAE_USER
-  CAE_UTENTE_V2: CAE_USER_V2
-  CAE_V2: CURRENT_RECENT_EMPLOYMENT_V2
-  CARTA_CONDUCAO: CONDUCT_LETTER
-  CARTA_CONDUCAO_NECESSARIA: PERFORMANCE_CHART
-  CARTEIRA_PROFISSIONAL: PROFESSIONAL_DOCUMENTATION
-  CATEGORIA: CATEGORY
-  CATEGORIA_ANT: PREV_CATEGORY
-  CATEGORIA_ANTERIOR: PREVIOUS_CATEGORY
-  CATEGORIA_CONJUGE: SPOUSE_CATEGORY
-  CCATEGORIA: CATEGORY_CODE
-  CCENTRO: IEFP_CENTER
-  CCENTRO_INS: CATEGORY_INS_CODE
-  CCRSS: CCRSS
-  CCURSO: COURSE_CODE
-  CDEFICIENCIA: DEFICIENCY_CODE
-  CEDENCIA_ETT: EDENCIA_EET_CODE
-  CENTFORMADORA: ENTFORMADORA_CODE
-  CENTRO: CENTER
-  CENTROA: CENTER_A
-  CENTRO_CTN: CENTER_CTN
-  CENTRO_CTN_N_P: CENTER_CTN_NP
-  CENTRO_MOVIMENTO: CENTER_MOVING
-  CENTRO_NP: CENTER_NP
-  CENTRO_OFA: CENTER_OFA
-  CENTRO_UTE: CENTER_UTE
-  CEST_SUPERIOR: EST_TOP
-  CFREGUESIA: PARISH_CODE
-  CHABILITACAO_ESCOLAR: SCHOOL_EDUCATION
-  CNACIONALIDADE: LEGAL_NATIONALITY
-  CNACIONALIDADE_ORIGEM: ORIGIN_NATIONALITY
-  CNACIONALIDADE_RESIDENCIA: RES_NATIONALITY
-  CNATUREZA_JURIDICA: LEGAL_STATUS
-  CNP: CNP_JOB_CURRENT
-  CNP_ANTERIOR: CNP_PREVIOUS
-  CNP_COLOCACAO: CNP_PLACEMENT
-  CNP_OFERTA: CNP_OFFER
-  CNP_PRETENDIDA: CNP_PRESCRIBED
-  CNP_PRINCIPAL: CNP_MAIN
-  CNP_UTENTE: CNP_UTENTE
-  CNT_ID: CNP_ID
-  CODIGO_INTERVENCAO: INTERVENTION_CODE
-  CODIGO_INTERV_ENCAMINH_ORIGEM: INTERVENTION_ROUTE_CODE
-  COD_INTERVENCAO: INTERVENTION_CODE
-  COD_PROG_SIEF: PROG_SIEF_CODE
-  COD_PROTOCOLO: PROTOCOL_CODE
-  COD_REQ_RSI: REQ_RSI_CODE
-  COD_SUBENTIDADE: SUB_ENTITY_CODE
-  COEFICIENTE_PROFILING: PROFILING_COEFFICIENT
-  CONCURSO_PUBLICO_ETT: PUBLIC_COMPETITION
-  CONJUGE_INSCRITO: REGISTERED_SPOUSE
-  CONSENTIMENTO_EURES: EURES_CONSENT
-  CONSEQUENCIA_CONTROLO: CONSEQ_CONTROL
-  CONTINGENTE: CONTINGENT
-  CONTROLADO_PARA: CONTROLLED_TO
-  CONVOCADO_EM: SUMMONS_IN
-  CONVOCADO_PARA: SUMMONS_TO
-  CON_NATURALIDADE: CON_NATURE
-  CPP: CPP
-  CPP_ANTERIOR: CPP_PREVIOUS
-  CPP_COLOCACAO: CPP_PLACEMENT
-  CPP_OFERTA: CPP_OFFER
-  CPP_PRETENDIDA: CPP_PRESCRIBED
-  CPP_PRINCIPAL: CPP_MAIN
-  CPP_UTENTE: CPP_USER
-  CREATION_DATE: CREATION_DATE
-  CV: CV
-  DATA_AFETACAO_TECNICO: DATE_TECHNICAL_EFFECT
-  DATA_AFETACAO_TECNICO_OFA: DATE_TECHNICAL_EFFECT_OFA
-  DATA_ANULACAO: CANCELLATION_DATE
-  DATA_APRESENTACAO: PRESENTATION_DATE
-  DATA_ATRIB_GC: GC_ATRIB
-  DATA_CANDIDATURA: APPLICATION_DATE
-  DATA_COLOCACAO: PLACEMENT_DATE
-  DATA_COMUNICACAO: COMMUNICATION_DATE
-  DATA_CONTROLO: CONTROL_DATE
-  DATA_DESEMPREGO: UNEMPLOYMENT_DATE
-  DATA_ELABORACAO_PPE: PREPARATION_DATE
-  DATA_EMISSAO_DEC: ISSUE_DATE
-  DATA_ENTRADA: DATE_ENTERED
-  DATA_ENTRADA_RMG: DATE_ENTERED_RMG
-  DATA_FIM: END_DATE
-  DATA_FIM_GJ: DATE_END_GJ
-  DATA_FIM_INDISPONIVEL: END_DATE_UNAVAILABLE
-  DATA_FIM_OCUPACAO: OCCUPATION_END_DATE
-  DATA_INICIO: START_DATE
-  DATA_INICIO_AGREG: AGGREGATE_START_DATE
-  DATA_INICIO_GJ: DATE_BEGINNING_GJ
-  DATA_INICIO_GJ_ANT: START_DATE_GJ_PREV
-  DATA_INICIO_OCUPACAO: OCCUPATION_START_DATE
-  DATA_INSCRICAO: INSCRIPTION_DATE
-  DATA_INSERCAO: INSERTION_DATE
-  DATA_INTERVENCAO: INTERVENTION_DATE
-  DATA_LIMITE_DIVULGACAO: RELEASE_DATE_LIMIT
-  DATA_MOVIMENTO: MOVEMENT_DATE
-  DATA_NAO_REINSCRICAO: DATE_NOT_REINSTATED
-  DATA_NASCIMENTO: DOB
-  DATA_N_REINSC: DATE_N_REINSC
-  DATA_PEDIDO_ULT_PED_ESCLAR: CLARIFICATION_REQUEST_DATE
-  DATA_PRIMEIRA_CANDIDATURA: FIRST_APPLICATION_DATE
-  DATA_PRIMEIRA_RESPOSTA_GJ: FIRST_RESPONSE_GJ
-  DATA_PRIM_CANDIDATURA: FIRST_APPLICATION_DATE
-  DATA_PRIM_RESP_GJ_INICIAL: FIRST_RESPONSE_GJ_DATE
-  DATA_PRIM_VISITA: FIRST_VISIT_DATE
-  DATA_REC_INTERNACIONAL: INTERNATIONAL_REC_DATE
-  DATA_RESPOSTA_ULT_PED_ESCLAR: CLARIFICATION_RESPONSE_DATE
-  DATA_RESULTADO: RESULT_DATE
-  DATA_SAIDA_RMG: GMI_EXIT_DATE
-  DATA_SUBSIDIO: SUBSIDY_DATE
-  DATA_SUSPENSAO: SUSPENSION_DATE
-  DATA_ULTIMA_DIVULGACAO: LAST_RELEASE_DATE
-  DATA_ULTIMA_SAIDA: LAST_DEPARTURE_DATE
-  DATA_ULTIMO_CONTACTO: LAST_CONTACT_DATE
-  DATA_ULT_VISITA: FUTURE_VISIT_DATE
-  DATA_VALIDADE: DATE_VALIDITY
-  DCURSO: COURSE
-  DECLARACAO_ENT_EMPREGADORA: DECLARATION_EMPLOYEE
-  DEF: DEF
-  DEFICIENCIA: EMPLOYMENT_SITUATION
-  DESCENDENTES_A_CARGO: DEPENDENT_DESCENDANTS
-  DESC_MOTIVO_ANULACAO: REASON_FOR_CANCELLATION
-  DESC_MOTIVO_INSCRICAO: REASON_FOR_REGISTERING
-  DIVULGACAO_PRETENDIDA: INTENDED_DISCLOSURE
-  DTFIMACTIVIDADE: END_ACTIVITY
-  DTFIMPROGRAMA: END_PROGRAM
-  DTINIACTIVIDADE: DT_IN_ACTIVITY
-  DTINIPROGRAMA: DT_IN_PROGRAM
-  DTMOVIMENTO: DT_MOVEMENT
-  DURACAO: DURATION
-  EAO: EAO_PROGRAMME
-  ENICC: NATIONAL_ROMA_COMMUNITIES_INTEGRATION_STRATEDGY
-  ESPANHOL: SPAIN
-  ESTABELECIMENTO: ESTABLISHMENT
-  ESTADO: STATE
-  ESTADO_ANTERIOR: PREVIOUS_STATUS
-  ESTADO_CIVIL: MARITAL_STATUS
-  ESTADO_CIV_CONJUGE: MARITAL_STATUS_SPOUSE
-  ESTADO_CONJUGE: STATUS_SPOUSE
-  ESTADO_UTENTE: STATUS_USER
-  EXPERIENCIA_ANT_EXIGIDA: PREVIOUS_EXPERIENCE_REQUIRED
-  E_MAIS: E_PLUS_PROGRAMME
-  FEG: FEG
-  FORMACAO_PROFISSIONAL: PROFESSIONAL_TRAINING
-  FRANCES: FRENCH
-  FREGUESIA: PARISH
-  FREGUESIA_ENTIDADE: PARISH_ENTITY
-  FREGUESIA_ETT: PARISH_
-  FREGUESIA_LOCAL_TRABALHO: PARISH_WORK_PLACE
-  FREGUESIA_OUTRA: PARISH_OTHER
-  FREGUESIA_RESIDENCIA_1: PARISH_RESIDENCE_1
-  FREGUESIA_RESIDENCIA_2: PARISH_RESIDENCE_2
-  FREGUESIA_RESIDENCIA_3: PARISH_RESIDENCE_3
-  FREGUESIA_ULTIMA_CNP: PARISH_ULTIMA_CNP
-  FREGUESIA_ULTIMA_CPP: PARISH_ULTIMA_CPP
-  FREG_ENTIDADE: PARISH_ENTITY
-  FREG_LOC_TRABALHO: PARISH_WORK_PLACE
-  F_CAREA_FORM: AREA_OF_TRAINING
-  F_CCURSO: F_C_COURSE
-  F_CMOD_FORM: F_C_MOD_FORM
-  F_CNO_ID_ESTABEL: F_CNO_ID_ESTABLISHMENT
-  F_CNO_NPC: F_CNO_NPC
-  F_CNO_SUB_ENT: F_CNO_SUB_ENT
-  F_DAREA_FORM: F_GIVE_FORM
-  F_DATA_FIM: F_DATE_END
-  F_DATA_INICIO: F_START_DATE
-  F_DCURSO: F_D_COURSE
-  F_DMOD_FORM: F_D_MOD_FORM
-  F_HORAS: F_HOURS
-  F_SITUACAO: F_SITUATION
-  F_VAGAS: F_VACANCIES
-  F_VAGAS_OCUPADAS: F_OCCUPIED_VACANCIES
-  GESTOR_CARREIRA: CAREER_MANAGER
-  GJ: GJ
-  GJ_ANT: GJ_ANT
-  GJ_ANTERIOR: PREVIOUS_GJ
-  GOE: GOE
-  HABILITACAO: SCHOOLING_LICENSE_CODE
-  HABILITACAO_MAXIMA: MAXIMUM_QUALIFICATION
-  HABILITACAO_MINIMA: MINIMUM_QUALIFICATION
-  HABILITACOES_MAXIMO: MAXIMUM_QUALIFICATIONS
-  HABILITACOES_MINIMA: MINIMUM_QUALIFICATIONS
-  ID: ID
-  IDADE: ID_AGE
-  IDADE_EMISSAO_DEC: ID_AGE_OF_ISSUE_DEC
-  IDADE_MAX: ID_MAX_AGE
-  IDADE_MAXIMA: ID_MAXIMUM_AGE
-  IDADE_MIN: ID_MIN_AGE
-  IDADE_MINIMA: ID_MINIMUM_AGE
-  IDCONVOCATORIA_ANT: ID_CALL_ANT
-  IDENTFORMADORA: IDENTFORMADORA
-  IDENTIFICACAO: IDENTIFICATION
-  IDPROCESSO: ID_PROCESS
-  ID_APRESENTACAO: ID_PRESENTATION
-  ID_CONJUGE: ID_SPOUSE
-  ID_CONJUGENUMERCI: ID_SPOUSE_NUMERCI
-  ID_CONVOCATORIA: ID_CALL
-  ID_ESTABEL: STABLE_ID
-  ID_INTERV_ENCAMINH: ID_INTERVENTION_FORWARD
-  ID_INTERV_ENCAMINH_ORIGEM: ID_INTERVENTION_FORWARD_SOURCE
-  ID_OFERTA: ID_OFFER
-  ID_OHP: ID_OHP
-  ID_REG_ENT: ID_REG_ENT
-  IND1_CAE: IND1_CAE
-  IND1_CAE_V2: IND1_CAE_V2
-  IND2_CAE: IND2_CAE
-  IND2_CAE_V2: IND2_CAE_V2
-  IND_CNP: IND_CNP
-  IND_CPP: IND_CPP
-  INGLES: ENGLISH
-  INTERESSE_ESTRATEGICO: STRATEGIC_INTEREST
-  ITO_ECO: ITO_ECO
-  ITO_ID: ITO_ID
-  LAST_UPDATE_DATE: LAST_UPDATE_DATE
-  LOCAL_COLOCACAO: PLACE_OF_PLACEMENT
-  LOCAL_TRABALHO: PLACE_OF_WORK
-  ME2012: EMPLOYMENT_RECRUITMENT_SUPPORT_2012
-  ME2013: EMPLOYMENT_RECRUITMENT_SUPPORT_2013
-  ME2014: EMPLOYMENT_RECRUITMENT_SUPPORT_2014
-  MEDIDA: MEASURE
-  MEDIDA_ORCAMENTAL: BUDGETARY_MEASURE
-  MODO_COMUNICACAO: COMMUNICATION_MODE
-  MOEDA: CURRENCY
-  MOEDA_SALARIO_PRETENDIDO: DESIRED_SALARY_CURRENCY
-  MOTIVO_ANTERIOR_SAIDA: PREVIOUS_REASON_FOR_LEAVING
-  MOTIVO_ANULACAO: CANCELLATION_REASON
-  MOTIVO_CANDIDATURA: APPLICATION_REASON
-  MOTIVO_ENC: REASON_ENC
-  MOTIVO_FIM_GJ: REASON_FIM_GJ
-  MOTIVO_FIM_RMG: REASON_FIM_RMG
-  MOTIVO_INDISPONIBILIDADE: REASON_FOR_UNAVAILABILITY
-  MOTIVO_INDISPONIBILIDADE_ANT: REASON_FOR_UNAVAILABILITY_ANT
-  MOTIVO_INSCRICAO: REASON_SUBSCRIPTION
-  MOTIVO_INSCRICAO_UTENTE: 'REASON_USER_REGISTERED '
-  MOTIVO_INVALIDACAO: REASON_FOR_CANCELLATION
-  MOTIVO_NAO_SINALIZACAO_GJ: REASON_NO_SIGNALLING
-  MOTIVO_RECUSA: REASON_REFUSED
-  MOTIVO_SUSPENSAO: REASON_FOR_SUSPENSION
-  MOTIVO_VISITA: REASON_FOR_VISIT
-  MOTIV_INDISP_CONJUGE: REASON_SPOUSE_UNAVAILABLE_FOR_EMPLOYMENT
-  NACIONALIDADE: NATIONALITY_CODE
-  NATUREZA: NATURE
-  NATUREZA_COLOCACAO: NATURE_PLACEMENT
-  NATUREZA_EMPREGO: NATURE_EMPLOYMENT
-  NCD_NATURALIDADE: NCD_NATURALIDADE
-  NCE_CNACIONALIDADE_RP: NCE_CNACIONALIDADE_RP
-  NIPC: NIPC
-  NISS: NISS
-  NIVEL_DIVULGACAO: PUBLISHING_LEVEL
-  NIVEL_INTERMEDIACAO: INTERMEDIATE_LEVEL
-  NR_MESES: NUM_MONTHS
-  NR_OFERTA: JOB_OFFER_ID
-  NR_PESSOAS_CARGO: NUM_DEPENDENTS
-  NR_PESSOAS_SERVICO: NUM_PEOPLE_SERVICE
-  NR_PESS_SERVICO: NUM_PEOPLE_SERVICE
-  NR_POSTOS_TRABALHO: NUM_JOBS
-  NR_PT: NR_PT
-  NR_UTENTE: NUMBER_USER
-  NUMERO_CONTROLO: CONTROL_NUMBER
-  NUM_PEDIDOS_ESCLAR: IN_AN_INFORMED_REQUEST
-  NUM_POSTOS_TRABALHO_INI: IN_AN_INI_WORK_PLACE
-  N_AGREGADO: N_AGGREGATE
-  N_CRIANCAS: N_CHILDREN
-  N_DESEMPREGADOS: N_UNEMPLOYED
-  N_INATIVOS: N_INACTIVE
-  N_VIA_DEC: N_VIA_DEC
-  OFA_CAE: OFFER_CAE
-  OFA_CAE_V2: OFFER_CAE_V2
-  OFA_CENTRO: OFFER_UNEMPLOYMENT_CENTER
-  OFA_CNP: OFFER_CNP
-  OFA_CPP: OFFER_CPP
-  OFA_DATA_REC_INTERN: OFFER_DATE_INTERN
-  OFA_ESTRANG_ID: OFFER_ALIEN_ID
-  OFA_FREGUESIA: OFFER_PARISH
-  OFA_ID: OFFER_ID
-  OFA_TIPO_ACTIVIDADE: OFA_ACTIVITY_TYPE
-  ORIGEM: ORIGIN
-  ORIGEM_CANDIDATURA: APPLICATION_ORIGIN
-  ORIGEM_INSERCAO: INPUT_ORIGIN
-  ORIGEM_OFERTA: OFFER_ORIGIN
-  ORIGEM_REGISTO_OFA: OFFER_REGISTRATION_ORIGIN
-  ORIGEM_REGISTO_UTENTE: USER_REGISTRATION_ORIGIN
-  OUTRA_LINGUA: OTHER_LANGUAGE
-  PAE: PAE
-  PAGAMENTO_VIAGENS: TRIP_PAYMENTS
-  PAIS_COLOCACAO: PLACEMENT_COUNTRY
-  PAIS_EMIGRACAO: COUNTRY_EMIGRATION
-  PAIS_EURES: COUNTRY_EURES
-  PE2012: PE_2012
-  PERTENCE_AO_PPE: BELONGS_PPE
-  PESSOAS_CARGO: DEPENDENTS
-  PLANO_EMPREGO: EMPLOYMENT_PLAN
-  POS_LABORAL: JOB_POSITION
-  PPE: PPE
-  PPE_ANTERIOR: PREVIOUS_PPE
-  PRI: PRI
-  PRIMEIRA_RESPOSTA_GJ: FIRST_RESPONSE_GJ
-  PRIMEIRA_RESPOSTA_TIE_COD_GJ: FIRST_RESPONSE_
-  PRIM_RESP_GJ_INICIAL: FIRST_RESPONSE_INITIAL_GJ
-  PRIM_RESP_TIE_COD_GJ_INICIAL: FIRST_RESPONSE_TIE_CODE_GJ
-  PROCESSO_RECUP_EMPRESAS: BUSINESS_RECOVERY_PROCESS
-  PROGRAMA: PROGRAM
-  PROJECTO: PROJECT
-  PROTOCOLO: PROTOCOL
-  QUALIFICACAO: QUALIFICATION
-  QUALIFICACOES: QUALIFICATIONS
-  QUALIFICACOES_CANDIDATO: CANDIDATE_QUALIFICATIONS
-  RECRUTAMENTO_EURES: EURES_RECRUITMENT
-  RECRUTAMENTO_INTERNACIONAL: INTERNATIONAL_RECRUITMENT
-  REDUCAO_TSU: TSU_REDUCTION
-  REEMBOLSO_TSU: TSU_REFUNDS
-  REGIME_HORARIO: EMPLOYMENT_HOURS
-  REGIME_TRABALHO_COLOCACAO: PLACEMENT_EMPLOYMENT_TYPE
-  REGIME_TRABALHO_PRETENDIDO: DESIRED_EMPLOYMENT_TYPE
-  REQUERER_SD: REQUIRE_SD
-  RESULTADO: RESULT
-  RESULTADO_APRESENTACAO: INTERVIEW_RESULT
-  RESULTADO_CONTROLO: CONTROL_RESULT
-  RESULTADO_INTERVENCAO: INTERVENTION_RESULT
-  REVALIDACAO: REVALIDATION
-  RINSC: REREGISTER
-  RMG: RMG
-  RMG_ANTERIOR: PREVIOUS_RMG
-  RP: RP
-  RSI: RSI
-  SALARIO: SALARY
-  SALARIO_PRETENDIDO: DESIRED_SALARY
-  SALDO_POSTOS: BALANCE_POSITIONS
-  SALDO_PT: BALANCE_PORTUGAL
-  SD_MOTIVO_DESEMPREGO: UNEMPLOYMENT_REASON
-  SEGMENTO: SEGMENT
-  SEGMENTO_ATRIBUIDO: ALLOCATED_SEGMENT
-  SEGMENTO_AUTOMATICO: AUTOMATIC_SEGMENT
-  SESSAO: SESSION
-  SEXO: GENDER
-  SIGO: SIGO
-  SITUACAO_MILITAR: MILITARY_SERVICE
-  STARTUP: STARTUP_PROGRAMME
-  SUB: SUBSIDY
-  SUBSIDIO: SUBSIDY
-  SUBSIDIO_CONJUGE: SUBSIDY_SPOUSE
-  SUB_COD_MOTIVO_CESSACAO: SUBSIDY_CANCEL_REASON
-  SUB_COD_MOTIVO_SUSPENSAO: SUBSIDY_SUSPENSION_REASON
-  SUB_DATA_EXTINCAO: SUBSIDY_DATE
-  SUB_DATA_FIM: SUBSIDY_DATE_END
-  SUB_DATA_INDEF: SUBSIDY_DATE_REJECTION
-  SUB_DATA_INICIO: SUBSIDY_DATE_START
-  SUB_DATA_REINICIO: SUBSIDY_DATE_RESTART
-  SUB_DATA_SUSPENSAO: SUBSIDY_DATE_SUSPEND
-  SUB_DECRETO_LEI: SUBSIDY_DECREE_LAW
-  SUB_REFEICAO: SUBSIDY_MEAL
-  SUB_TEMPO_PREVISTO: SUBSIDY_PLANNED_TIME
-  SUB_TRANSPORTE: SUBSIDY_TRANSPORT
-  SUB_TURNO: SUBSIDY_SHIFT
-  SUB_VALOR: SUBSIDY_VALUE
-  TEMPO_INSCRICAO: TIME_REGISTRATION
-  TEMPO_PARCIAL: TIME_PARTIAL
-  TEMPO_PERMANENCIA: TIME_OF_RESIDENCE
-  TEMPO_PRATICA: TIME_EXPERIENCE
-  TEMPO_PRATICA_MAX: TIME_EXPERIENCE_MAX
-  TEMPO_PRATICA_MIN: TIME_EXPERIENCE_MIN
-  TEMPO_PRATICA_UCNP: TIME_EXPERIENCE_LAST_CNP
-  TEMPO_PRATICA_UCPP: TIME_EXPERIENCE_LAST_CPP
-  TEMPO_RESPOSTA: TIME_RESPONSE
-  TEMPO_ULTIMO_CNP: TIME_LAST_CNP
-  TEMPO_ULTIMO_CPP: TIME_LAST_CPP
-  TIE: TIE
-  TIPO: TYPE
-  TIPO_ACTIVIDADE: TYPE_ACTIVITY
-  TIPO_CANDIDATURA_EXTERNA: TYPE_EXTERNAL_APPLICATION
-  TIPO_CONTRATO_PRETENDIDO: TYPE_DESIRED_CONTRACT
-  TIPO_DOC_ID: TYPE_DOC_ID
-  TIPO_ENCAMINHAMENTO: TYPE_REFERRAL
-  TIPO_ENTIDADE_AQ: TYPE_ENTITY_AQ
-  TIPO_FEG: TYPE_FEG
-  TIPO_MOVIMENTO: TYPE_ENTRY
-  TIPO_NET: TYPE_NET
-  TIPO_NOTIFICACAO_OCORRENCIA: TYPE_NOTIFICATION_OCCURANCE
-  TIPO_OCUPACAO: TYPE_OCCUPATION
-  TIPO_OFERTA: TYPE_OFFER
-  TIPO_OFERTA_LSE: TYPE_OFFER_LSE
-  TIPO_ORIGEM: TYPE_ORIGIN
-  TIPO_RESPOSTA: TYPE_RESPONSE
-  TIPO_RESULTADO_NOTIFICACAO: TYPE_RESULT_NOTIFICATION
-  TIPO_RSI: TYPE_RSI
-  TIPO_SALARIO: TYPE_SALARY
-  TIPO_SESSAO: TYPE_SESSION
-  TIPO_UTENTE: TYPE_USER
-  TRANSPORTE_PROPRIO: OWN_TRANSPORT
-  TSU45: TSU45
-  TUC: TUC
-  TUC_CODIGO: TUC_CODE
-  UCNP: LAST_CNP
-  UCPP: LAST_CCP
-  UTE_ID: OPERATOR_ID
-  UTE_TYPE: OPERATOR_TYPE
-  UTILIZADOR: OPERATOR
-  UTIL_TECNICO_MANUAL: OPERATOR_TECHNICAL_MANUAL
-  VALIDADOR: VALIDATOR
-  VALIDA_APRES_INTERNET: VALID_INTERNET_PRESENCE
-  VALOR_DIARIO_ALOJAMENTO: DAILY_LODGIN_VALUE
-  VALOR_DIARIO_VIAGENS: DAILY_TRAVEL_VALUE
-  VALOR_SUB_REFEICAO: SUBSIDY_MEAL_VALUE
-  VALOR_SUB_TRANSPORTE: SUBSIDY_TRANSPORT_VALUE
-  VALOR_SUB_TURNO: SUBSIDY_SHIFT_VALUE
+ac: ac
+aceitar_bec: accept_bec
+acompanhada: follow_up
+advert_notif: advert_notif
+afirmativo: affirmative
+agregado_monoparental: single_parent
+alemao: german
+ambito: ambition
+ano_conclusao_curso: uni_grad_year
+ano_mes: year_month_date_stamp
+apoio_alojamento: housing_support
+apresentacao_directa: direct_presentation
+apresentacao_quinzenal: biweekly_presentation
+areas_curso: qualification_area
+area_curso: qualification_area
+area_formacao: area_training
+area_intervencao: intervention_area
+area_recrutamento: recriutment_area
+ascendentes_a_cargo: older_dependents
+autoriza_consulta_acordo_sect: consultancy_agreement
+a_tempo: time
+bde_cae: bde_cae
+bde_freguesia: bde_parish
+bde_nr_pessoas_servico: bde_nr_personal_service
+caccao: caccao
+cae: current_recent_employment
+cae_anterior: previous_employment
+cae_anterior_v2: previous_employment_v2
+cae_colocacao: cae_placement
+cae_colocacao_v2: cae_placement_v2
+cae_entidade: cae_entity
+cae_entidade_v2: cae_entity_v2
+cae_ett: cae_ett
+cae_prioritaria: cae_priority
+cae_utente: cae_user
+cae_utente_v2: cae_user_v2
+cae_v2: current_recent_employment_v2
+carta_conducao: conduct_letter
+carta_conducao_necessaria: performance_chart
+carteira_profissional: professional_documentation
+categoria: category
+categoria_ant: prev_category
+categoria_anterior: previous_category
+categoria_conjuge: spouse_category
+ccategoria: category_code
+ccentro: iefp_center
+ccentro_ins: category_ins_code
+ccrss: ccrss
+ccurso: course_code
+cdeficiencia: deficiency_code
+cedencia_ett: edencia_eet_code
+centformadora: entformadora_code
+centro: center
+centroa: center_a
+centro_ctn: center_ctn
+centro_ctn_n_p: center_ctn_np
+centro_movimento: center_moving
+centro_np: center_np
+centro_ofa: center_ofa
+centro_ute: center_ute
+cest_superior: est_top
+cfreguesia: parish_code
+chabilitacao_escolar: school_education
+cnacionalidade: legal_nationality
+cnacionalidade_origem: origin_nationality
+cnacionalidade_residencia: res_nationality
+cnatureza_juridica: legal_status
+cnp: cnp_job_current
+cnp_anterior: cnp_previous
+cnp_colocacao: cnp_placement
+cnp_oferta: cnp_offer
+cnp_pretendida: cnp_desired
+cnp_principal: cnp_main
+cnp_utente: cnp_utente
+cnt_id: cnp_id
+codigo_intervencao: intervention_code
+codigo_interv_encaminh_origem: intervention_route_code
+cod_intervencao: intervention_code
+cod_prog_sief: prog_sief_code
+cod_protocolo: protocol_code
+cod_req_rsi: req_rsi_code
+cod_subentidade: sub_entity_code
+coeficiente_profiling: profiling_coefficient
+concurso_publico_ett: public_competition
+conjuge_inscrito: registered_spouse
+consentimento_eures: eures_consent
+consequencia_controlo: conseq_control
+contingente: contingent
+controlado_para: controlled_to
+convocado_em: summons_in
+convocado_para: summons_to
+con_naturalidade: con_nature
+cpp: cpp
+cpp_anterior: cpp_previous
+cpp_colocacao: cpp_placement
+cpp_oferta: cpp_offer
+cpp_pretendida: cpp_desired
+cpp_principal: cpp_main
+cpp_utente: cpp_user
+creation_date: creation_date
+cv: cv
+data_afetacao_tecnico: date_technical_effect
+data_afetacao_tecnico_ofa: date_technical_effect_ofa
+data_anulacao: cancellation_date
+data_apresentacao: presentation_date
+data_atrib_gc: gc_atrib
+data_candidatura: application_date
+data_colocacao: placement_date
+data_comunicacao: communication_date
+data_controlo: control_date
+data_desemprego: unemployment_date
+data_elaboracao_ppe: preparation_date
+data_emissao_dec: issue_date
+data_entrada: date_entered
+data_entrada_rmg: date_entered_rmg
+data_fim: end_date
+data_fim_gj: date_end_gj
+data_fim_indisponivel: end_date_unavailable
+data_fim_ocupacao: occupation_end_date
+data_inicio: start_date
+data_inicio_agreg: aggregate_start_date
+data_inicio_gj: date_beginning_gj
+data_inicio_gj_ant: start_date_gj_prev
+data_inicio_ocupacao: occupation_start_date
+data_inscricao: inscription_date
+data_insercao: insertion_date
+data_intervencao: intervention_date
+data_limite_divulgacao: release_date_limit
+data_movimento: movement_date
+data_nao_reinscricao: date_not_reinstated
+data_nascimento: dob
+data_n_reinsc: date_n_reinsc
+data_pedido_ult_ped_esclar: clarification_request_date
+data_primeira_candidatura: first_application_date
+data_primeira_resposta_gj: first_response_gj
+data_prim_candidatura: first_application_date
+data_prim_resp_gj_inicial: first_response_gj_date
+data_prim_visita: first_visit_date
+data_rec_internacional: international_rec_date
+data_resposta_ult_ped_esclar: clarification_response_date
+data_resultado: result_date
+data_saida_rmg: gmi_exit_date
+data_subsidio: subsidy_date
+data_suspensao: suspension_date
+data_ultima_divulgacao: last_release_date
+data_ultima_saida: last_departure_date
+data_ultimo_contacto: last_contact_date
+data_ult_visita: future_visit_date
+data_validade: date_validity
+dcurso: course
+declaracao_ent_empregadora: declaration_employee
+def: def
+deficiencia: employment_situation
+descendentes_a_cargo: dependent_descendants
+desc_motivo_anulacao: reason_for_cancellation
+desc_motivo_inscricao: reason_for_registering
+divulgacao_pretendida: intended_disclosure
+dtfimactividade: end_activity
+dtfimprograma: end_program
+dtiniactividade: dt_in_activity
+dtiniprograma: dt_in_program
+dtmovimento: dt_movement
+duracao: duration
+eao: eao_programme
+enicc: national_roma_communities_integration_stratedgy
+espanhol: spain
+estabelecimento: establishment
+estado: state
+estado_anterior: previous_status
+estado_civil: marital_status
+estado_civ_conjuge: marital_status_spouse
+estado_conjuge: status_spouse
+estado_utente: status_user
+experiencia_ant_exigida: previous_experience_required
+e_mais: e_plus_programme
+feg: feg
+formacao_profissional: professional_training
+frances: french
+freguesia: parish
+freguesia_entidade: parish_entity
+freguesia_ett: parish_
+freguesia_local_trabalho: parish_work_place
+freguesia_outra: parish_other
+freguesia_residencia_1: parish_residence_1
+freguesia_residencia_2: parish_residence_2
+freguesia_residencia_3: parish_residence_3
+freguesia_ultima_cnp: parish_ultima_cnp
+freguesia_ultima_cpp: parish_ultima_cpp
+freg_entidade: parish_entity
+freg_loc_trabalho: parish_work_place
+f_carea_form: area_of_training
+f_ccurso: f_c_course
+f_cmod_form: f_c_mod_form
+f_cno_id_estabel: f_cno_id_establishment
+f_cno_npc: f_cno_npc
+f_cno_sub_ent: f_cno_sub_ent
+f_darea_form: f_give_form
+f_data_fim: f_date_end
+f_data_inicio: f_start_date
+f_dcurso: f_d_course
+f_dmod_form: f_d_mod_form
+f_horas: f_hours
+f_situacao: f_situation
+f_vagas: f_vacancies
+f_vagas_ocupadas: f_occupied_vacancies
+gestor_carreira: career_manager
+gj: gj
+gj_ant: gj_ant
+gj_anterior: previous_gj
+goe: goe
+habilitacao: schooling_license_code
+habilitacao_maxima: maximum_qualification
+habilitacao_minima: minimum_qualification
+habilitacoes_maximo: maximum_qualifications
+habilitacoes_minima: minimum_qualifications
+id: id
+idade: id_age
+idade_emissao_dec: id_age_of_issue_dec
+idade_max: id_max_age
+idade_maxima: id_maximum_age
+idade_min: id_min_age
+idade_minima: id_minimum_age
+idconvocatoria_ant: id_call_ant
+identformadora: identformadora
+identificacao: identification
+idprocesso: id_process
+id_apresentacao: id_presentation
+id_conjuge: id_spouse
+id_conjugenumerci: id_spouse_numerci
+id_convocatoria: id_call
+id_estabel: stable_id
+id_interv_encaminh: id_intervention_forward
+id_interv_encaminh_origem: id_intervention_forward_source
+id_oferta: id_offer
+id_ohp: id_ohp
+id_reg_ent: id_reg_ent
+ind1_cae: ind1_cae
+ind1_cae_v2: ind1_cae_v2
+ind2_cae: ind2_cae
+ind2_cae_v2: ind2_cae_v2
+ind_cnp: ind_cnp
+ind_cpp: ind_cpp
+ingles: english
+interesse_estrategico: strategic_interest
+ito_eco: ito_eco
+ito_id: ito_id
+last_update_date: last_update_date
+local_colocacao: place_of_placement
+local_trabalho: place_of_work
+me2012: employment_recruitment_support_2012
+me2013: employment_recruitment_support_2013
+me2014: employment_recruitment_support_2014
+medida: measure
+medida_orcamental: budgetary_measure
+modo_comunicacao: communication_mode
+moeda: currency
+moeda_salario_pretendido: desired_salary_currency
+motivo_anterior_saida: previous_reason_for_leaving
+motivo_anulacao: cancellation_reason
+motivo_candidatura: application_reason
+motivo_enc: reason_enc
+motivo_fim_gj: reason_fim_gj
+motivo_fim_rmg: reason_fim_rmg
+motivo_indisponibilidade: reason_for_unavailability
+motivo_indisponibilidade_ant: reason_for_unavailability_ant
+motivo_inscricao: reason_subscription
+motivo_inscricao_utente: 'reason_user_registered '
+motivo_invalidacao: reason_for_cancellation
+motivo_nao_sinalizacao_gj: reason_no_signalling
+motivo_recusa: reason_refused
+motivo_suspensao: reason_for_suspension
+motivo_visita: reason_for_visit
+motiv_indisp_conjuge: reason_spouse_unavailable_for_employment
+nacionalidade: nationality_code
+natureza: nature
+natureza_colocacao: nature_placement
+natureza_emprego: nature_employment
+ncd_naturalidade: ncd_naturalidade
+nce_cnacionalidade_rp: nce_cnacionalidade_rp
+nipc: nipc
+niss: niss
+nivel_divulgacao: publishing_level
+nivel_intermediacao: intermediate_level
+nr_meses: num_months
+nr_oferta: job_offer_id
+nr_pessoas_cargo: num_dependents
+nr_pessoas_servico: num_people_service
+nr_pess_servico: num_people_service
+nr_postos_trabalho: num_jobs
+nr_pt: nr_pt
+nr_utente: number_user
+numero_controlo: control_number
+num_pedidos_esclar: in_an_informed_request
+num_postos_trabalho_ini: in_an_ini_work_place
+n_agregado: n_aggregate
+n_criancas: n_children
+n_desempregados: n_unemployed
+n_inativos: n_inactive
+n_via_dec: n_via_dec
+ofa_cae: offer_cae
+ofa_cae_v2: offer_cae_v2
+ofa_centro: offer_unemployment_center
+ofa_cnp: offer_cnp
+ofa_cpp: offer_cpp
+ofa_data_rec_intern: offer_date_intern
+ofa_estrang_id: offer_alien_id
+ofa_freguesia: offer_parish
+ofa_id: offer_id
+ofa_tipo_actividade: ofa_activity_type
+origem: origin
+origem_candidatura: application_origin
+origem_insercao: input_origin
+origem_oferta: offer_origin
+origem_registo_ofa: offer_registration_origin
+origem_registo_utente: user_registration_origin
+outra_lingua: other_language
+pae: pae
+pagamento_viagens: trip_payments
+pais_colocacao: placement_country
+pais_emigracao: country_emigration
+pais_eures: country_eures
+pe2012: pe_2012
+pertence_ao_ppe: belongs_ppe
+pessoas_cargo: dependents
+plano_emprego: employment_plan
+pos_laboral: job_position
+ppe: ppe
+ppe_anterior: previous_ppe
+pri: pri
+primeira_resposta_gj: first_response_gj
+primeira_resposta_tie_cod_gj: first_response_
+prim_resp_gj_inicial: first_response_initial_gj
+prim_resp_tie_cod_gj_inicial: first_response_tie_code_gj
+processo_recup_empresas: business_recovery_process
+programa: program
+projecto: project
+protocolo: protocol
+qualificacao: qualification
+qualificacoes: qualifications
+qualificacoes_candidato: candidate_qualifications
+recrutamento_eures: eures_recruitment
+recrutamento_internacional: international_recruitment
+reducao_tsu: tsu_reduction
+reembolso_tsu: tsu_refunds
+regime_horario: employment_hours
+regime_trabalho_colocacao: placement_employment_type
+regime_trabalho_pretendido: desired_employment_type
+requerer_sd: require_sd
+resultado: result
+resultado_apresentacao: interview_result
+resultado_controlo: control_result
+resultado_intervencao: intervention_result
+revalidacao: revalidation
+rinsc: reregister
+rmg: rmg
+rmg_anterior: previous_rmg
+rp: rp
+rsi: rsi
+salario: salary
+salario_pretendido: desired_salary
+saldo_postos: balance_positions
+saldo_pt: balance_portugal
+sd_motivo_desemprego: unemployment_reason
+segmento: segment
+segmento_atribuido: allocated_segment
+segmento_automatico: automatic_segment
+sessao: session
+sexo: gender
+sigo: sigo
+situacao_militar: military_service
+startup: startup_programme
+sub: subsidy
+subsidio: subsidy
+subsidio_conjuge: subsidy_spouse
+sub_cod_motivo_cessacao: subsidy_cancel_reason
+sub_cod_motivo_suspensao: subsidy_suspension_reason
+sub_data_extincao: subsidy_date
+sub_data_fim: subsidy_date_end
+sub_data_indef: subsidy_date_rejection
+sub_data_inicio: subsidy_date_start
+sub_data_reinicio: subsidy_date_restart
+sub_data_suspensao: subsidy_date_suspend
+sub_decreto_lei: subsidy_decree_law
+sub_refeicao: subsidy_meal
+sub_tempo_previsto: subsidy_planned_time
+sub_transporte: subsidy_transport
+sub_turno: subsidy_shift
+sub_valor: subsidy_value
+tempo_inscricao: time_registration
+tempo_parcial: time_partial
+tempo_permanencia: time_of_residence
+tempo_pratica: time_experience
+tempo_pratica_max: time_experience_max
+tempo_pratica_min: time_experience_min
+tempo_pratica_ucnp: time_experience_last_cnp
+tempo_pratica_ucpp: time_experience_last_cpp
+tempo_resposta: time_response
+tempo_ultimo_cnp: time_last_cnp
+tempo_ultimo_cpp: time_last_cpp
+tie: tie
+tipo: type
+tipo_actividade: type_activity
+tipo_candidatura_externa: type_external_application
+tipo_contrato_pretendido: type_desired_contract
+tipo_doc_id: type_doc_id
+tipo_encaminhamento: type_referral
+tipo_entidade_aq: type_entity_aq
+tipo_feg: type_feg
+tipo_movimento: type_entry
+tipo_net: type_net
+tipo_notificacao_ocorrencia: type_notification_occurance
+tipo_ocupacao: type_occupation
+tipo_oferta: type_offer
+tipo_oferta_lse: type_offer_lse
+tipo_origem: type_origin
+tipo_resposta: type_response
+tipo_resultado_notificacao: type_result_notification
+tipo_rsi: type_rsi
+tipo_salario: type_salary
+tipo_sessao: type_session
+tipo_utente: type_user
+transporte_proprio: own_transport
+tsu45: tsu45
+tuc: tuc
+tuc_codigo: tuc_code
+ucnp: last_cnp
+ucpp: last_ccp
+ute_id: operator_id
+ute_type: operator_type
+utilizador: operator
+util_tecnico_manual: operator_technical_manual
+validador: validator
+valida_apres_internet: valid_internet_presence
+valor_diario_alojamento: daily_lodgin_value
+valor_diario_viagens: daily_travel_value
+valor_sub_refeicao: subsidy_meal_value
+valor_sub_transporte: subsidy_transport_value
+valor_sub_turno: subsidy_shift_value
