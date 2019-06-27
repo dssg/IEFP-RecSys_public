@@ -785,3 +785,14 @@ CREATE TABLE freguesia_nuts (
 );
 
 \COPY freguesia_nuts from 'FREGUESIA_NUTS.csv' with csv header; --6931
+
+--table cae_correspondence
+DROP TABLE IF EXISTS cae_correspondence;
+
+CREATE TABLE cae_correspondence (
+	cae_divisao DECIMAL NOT NULL,
+	cae_seccao VARCHAR NOT NULL,
+	hcae VARCHAR NOT NULL
+);
+
+\COPY cae_correspondence from 'CAE_CORRESPONDENCE.csv' with csv header; --89
