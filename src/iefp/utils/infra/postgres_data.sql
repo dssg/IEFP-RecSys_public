@@ -109,7 +109,7 @@ CREATE TABLE ofertas (
 
 CREATE INDEX ofertas_idx_nr_oferta on ofertas(nr_oferta);
 
-\copy ofertas from 'EMP_OFERTAS.csv' with csv header; --
+\copy ofertas from '/data/EMP_OFERTAS.csv' with csv header; --
 
 --table pedidos
 drop table if exists pedidos;
@@ -272,7 +272,7 @@ CREATE INDEX pedidos_idx_data_movimento on pedidos(data_movimento);
 CREATE INDEX pedidos_idx_ute_id_data_movimento on pedidos(ute_id, data_movimento);
 
 
-\copy pedidos from 'emp_pedidos.csv' with csv header; --37,317,447
+\copy pedidos from '/data/emp_pedidos.csv' with csv header; --37,317,447
 
 --table apresentados
 DROP TABLE IF EXISTS apresentados;
@@ -394,7 +394,7 @@ CREATE INDEX apresentados_idx_ute_id on apresentados(ute_id);
 CREATE INDEX apresentados_idx_nr_oferta on apresentados(nr_oferta);
 CREATE INDEX apresentados_idx_data_movimento on apresentados(data_movimento);
 
-\COPY apresentados from 'MOV_APRESENTADOS.csv' with csv header; --13,989,614
+\COPY apresentados from '/data/MOV_APRESENTADOS.csv' with csv header; --13,989,614
 
 --table convocados
 DROP TABLE IF EXISTS convocados;
@@ -499,7 +499,7 @@ CREATE INDEX convocados_idx_ute_id on convocados(ute_id);
 CREATE INDEX convocados_idx_nr_oferta on convocados(nr_oferta);
 CREATE INDEX convocados_idx_data_movimento on convocados(data_movimento);
 
-\COPY  convocados from 'MOV_CONVOCADOS.csv' with csv header; --38,498,895
+\COPY  convocados from '/data/MOV_CONVOCADOS.csv' with csv header; --38,498,895
 
 --table intervencoes
 DROP TABLE IF EXISTS intervencoes;
@@ -630,9 +630,11 @@ CREATE TABLE intervencoes (
 	last_update_date VARCHAR
 );
 
-\COPY intervencoes from 'MOV_INTERVENCOES.csv' with csv header; --44,585,170
+\COPY intervencoes from '/data/MOV_INTERVENCOES.csv' with csv header; --44,585,170
 
---intevenciones 44,585,171
+CREATE INDEX intervencoes_idx_ute_id on intervencoes(ute_id);
+CREATE INDEX intervencoes_idx_ano_mes on intervencoes(ano_mes);
+CREATE INDEX intervencoes_idx_data_movimento on intervencoes(data_movimento);
 
 --table estatisticos
 DROP TABLE IF EXISTS estatisticos;
@@ -644,7 +646,7 @@ CREATE TABLE estatisticos (
 	htipo_movimento VARCHAR
 );
 
-\COPY estatisticos from 'MOV_ESTATISTICOS.csv' with csv header; --72
+\COPY estatisticos from '/data/MOV_ESTATISTICOS.csv' with csv header; --72
 
 CREATE INDEX estatisticos_idx_ctipo_movimento on estatisticos(ctipo_movimento);
 CREATE INDEX estatisticos_idx_tipo_movimento on estatisticos(tipo_movimento);
@@ -678,7 +680,7 @@ CREATE INDEX intervencoes_idx_codigo_interv on tipos_intervencoes(codigo_interv)
 CREATE INDEX intervencoes_idx_dcodigo_interv on tipos_intervencoes(dcodigo_interv);
 CREATE INDEX intervencoes_idx_tipo on tipos_intervencoes(tipo);
 
-\COPY tipos_intervencoes from 'TIPOS_INTERVENCOES.csv' with csv header; --484
+\COPY tipos_intervencoes from '/data/TIPOS_INTERVENCOES.csv' with csv header; --484
 
 --table resultado_intervencaoes
 DROP TABLE IF EXISTS resultado_intervencoes;
@@ -696,7 +698,7 @@ CREATE INDEX resultado_intervencoes_dresultado on resultado_intervencoes(dresult
 CREATE INDEX resultado_intervencoes_hresultado on resultado_intervencoes(hresultado);
 CREATE INDEX resultado_intervencoes_codigo_interv on resultado_intervencoes(codigo_interv);
 
-\COPY resultado_intervencoes from 'RESULTADO_INTERVENCOES.csv' with csv header; --2652
+\COPY resultado_intervencoes from '/data/RESULTADO_INTERVENCOES.csv' with csv header; --2652
 
 DROP TABLE IF EXISTS resultado_convocados;
 
@@ -708,7 +710,7 @@ CREATE TABLE resultado_convocados (
 	hresultado_convocatoria VARCHAR
 );
 
-\COPY resultado_convocados from 'RESULTADO_CONVOCADOS.csv' with csv header; --23
+\COPY resultado_convocados from '/data/RESULTADO_CONVOCADOS.csv' with csv header; --23
 
 --table resultado_apresentacaoes
 DROP TABLE IF EXISTS resultado_apresentacoes;
@@ -720,7 +722,7 @@ CREATE TABLE resultado_apresentacoes (
 	hresultado_apres VARCHAR
 );
 
-\COPY resultado_apresentacoes from 'RESULTADO_APRESENTACOES.csv' with csv header;
+\COPY resultado_apresentacoes from '/data/RESULTADO_APRESENTACOES.csv' with csv header;
 
 --table nacionalidade
 DROP TABLE IF EXISTS nacionalidade;
@@ -732,7 +734,7 @@ CREATE TABLE nacionalidade (
 	dnacionalidade VARCHAR NOT NULL
 );
 
-\COPY nacionalidade from 'NACIONALIDADE.csv' with csv header; --200
+\COPY nacionalidade from '/data/NACIONALIDADE.csv' with csv header; --200
 
 --table motivos_suspensao_cessacao_subsidio
 DROP TABLE IF EXISTS motivos_suspensao_cessacao_subsidio;
@@ -746,7 +748,7 @@ CREATE TABLE motivos_suspensao_cessacao_subsidio (
 	estado_code DECIMAL
 );
 
-\COPY motivos_suspensao_cessacao_subsidio from 'MOTIVOS_SUSPENSAO_CESSACAO_SUBSIDIO.csv' with csv header; --124
+\COPY motivos_suspensao_cessacao_subsidio from '/data/MOTIVOS_SUSPENSAO_CESSACAO_SUBSIDIO.csv' with csv header; --124
 
 --table motivos_inscricao
 DROP TABLE IF EXISTS motivos_inscricao;
@@ -759,7 +761,7 @@ CREATE TABLE motivos_inscricao (
 	hmotivo_inscricao VARCHAR NOT NULL
 );
 
-\COPY motivos_inscricao from 'MOTIVOS_INSCRICAO.csv' with csv header; --29
+\COPY motivos_inscricao from '/data/MOTIVOS_INSCRICAO.csv' with csv header; --29
 
 --table motivos_anulacao
 DROP TABLE IF EXISTS motivos_anulacao;
@@ -772,7 +774,7 @@ CREATE TABLE motivos_anulacao (
 	hmotivo_anulacao VARCHAR NOT NULL
 );
 
-\COPY motivos_anulacao from 'MOTIVOS_ANULACAO.csv' with csv header; --51
+\COPY motivos_anulacao from '/data/MOTIVOS_ANULACAO.csv' with csv header; --51
 
 --table freguesia_nuts
 DROP TABLE IF EXISTS freguesia_nuts;
@@ -784,7 +786,7 @@ CREATE TABLE freguesia_nuts (
 	dfreguesia VARCHAR
 );
 
-\COPY freguesia_nuts from 'FREGUESIA_NUTS.csv' with csv header; --6931
+\COPY freguesia_nuts from '/data/FREGUESIA_NUTS.csv' with csv header; --6931
 
 --table cae_correspondence
 DROP TABLE IF EXISTS cae_correspondence;
@@ -795,4 +797,4 @@ CREATE TABLE cae_correspondence (
 	hcae VARCHAR NOT NULL
 );
 
-\COPY cae_correspondence from 'CAE_CORRESPONDENCE.csv' with csv header; --89
+\COPY cae_correspondence from '/data/CAE_CORRESPONDENCE.csv' with csv header; --89
