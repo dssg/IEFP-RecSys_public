@@ -9,7 +9,8 @@ setup(
         "PyYAML>=5.1",
         "matplotlib>=3.1",
         "pandas>=0.23.4",
+        "psycopg2>=2.8.3",
         "s3fs>=0.2.1",
-	"sqlalchemy==1.2.19",
+        "sqlalchemy==1.2.19",
     ],
 )
