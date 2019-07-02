@@ -1,4 +1,4 @@
-.PHONY: clean lint requirements jupyter venv
+.PHONY: clean lint requirements jupyter lab venv
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -23,6 +23,10 @@ clean:
 jupyter:
 	@echo "Running jupyter notebook in background..."
 	@$(VENV_DIR)/bin/jupyter notebook --notebook-dir=$(NOTEBOOK_DIR)
+
+lab:
+	@echo "Running jupyter lab in background..."
+	@$(VENV_DIR)/bin/jupyter lab --no-browser
 
 lint:
 	@$(PYTHON_INTERPRETER) -m flake8 --max-line-length=90 ./src
