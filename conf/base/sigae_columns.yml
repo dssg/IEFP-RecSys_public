@@ -1,7 +1,7 @@
 pedidos:
     - ute_id
-    - tipo_movimento
     - data_movimento
+    - tipo_movimento
     - motivo_inscricao
     - motivo_anulacao
     - motivo_invalidacao
@@ -9,6 +9,7 @@ pedidos:
     - rinsc
     - data_nascimento
     - sexo
+    - idade
     - deficiencia
     - nr_pessoas_cargo
     - formacao_profissional
@@ -31,3 +32,31 @@ pedidos:
     - local_trabalho
     - a_tempo
     - natureza_emprego
+intervencoes:
+    - ute_id
+    - tipo_utente
+    - centro           
+    - tipo_movimento
+    - data_intervencao
+    - codigo_intervencao
+    - cnp_pretendida
+    - area_intervencao
+    - data_resultado
+    - resultado_intervencao
+    - qualificacao
+    - areas_curso 
+    - tempo_pratica_ucnp
+    - tipo
+    - tipo_encaminhamento
+    - ccentro
+    - f_dcurso
+    - f_horas
+    - f_cmod_form
+    - f_ccurso
+    - f_dmod_form
+    - f_carea_form
+    - f_darea_form
+    - f_vagas
+    - f_vagas_ocupadas           
+    - cest_superior
+    
