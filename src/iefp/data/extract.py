@@ -25,11 +25,38 @@ class ExtractPedidos(luigi.Task):
     )
 
     def run(self):
-        paths = query_to_parquet(self.query, self.s3path, self.limit)
+        paths = query_to_parquet(self.query, self.s3path, self.limit, "pedidos")
         concat_parquet(paths, self.output().path)
 
     def output(self):
         return S3Target(self.s3path + "pedidos.parquet")
+
+
+class ExtractInterventions(luigi.Task):
+
+    sigae_cols = yaml.load(open("./conf/base/sigae_columns.yml"), Loader=yaml.FullLoader)
+    buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
+    s3path = buckets["intermediate"]["filter"]
+
+    table = "intervencoes"
+    cols = sigae_cols["intervencoes"]
+    limit = 10000000
+
+    query = """
+    select {}
+    from {}
+    order by ano_mes desc
+    limit {}
+    """.format(
+        ", ".join(cols), table, limit
+    )
+
+    def run(self):
+        paths = query_to_parquet(self.query, self.s3path, self.limit, "interventions")
+        concat_parquet(paths, self.output().path)
+
+    def output(self):
+        return S3Target(self.s3path + "intervencoes.parquet")
 
 
 def concat_parquet(paths, s3path):
@@ -45,7 +72,7 @@ def concat_parquet(paths, s3path):
     df.to_parquet(s3path)
 
 
-def query_to_parquet(query, s3path, rows):
+def query_to_parquet(query, s3path, rows, table):
     creds = yaml.load(open("./conf/local/credentials.yml"), Loader=yaml.FullLoader)
     pg_cred = creds["db"]
 
@@ -58,7 +85,7 @@ def query_to_parquet(query, s3path, rows):
     files = list()
     i = 0
     for chunk in pd.read_sql(query, con, chunksize=rows / 10):
-        temp_path = s3path + "temp{}.parquet".format(i)
+        temp_path = s3path + "{}_temp{}.parquet".format(table, i)
         chunk.to_parquet(temp_path)
         files.append(temp_path)
         i = i + 1

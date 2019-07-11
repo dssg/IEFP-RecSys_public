@@ -1,8 +1,9 @@
 import luigi
 
-from iefp.data.extract import ExtractPedidos
+from iefp.data.extract import ExtractInterventions, ExtractPedidos
 
 
 class RunFull(luigi.WrapperTask):
     def requires(self):
-        return ExtractPedidos()
+        yield ExtractInterventions()
+        yield ExtractPedidos()
