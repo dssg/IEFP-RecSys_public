@@ -7,10 +7,10 @@ setup(
     packages=find_packages(where="src"),
     install_requires=[
         "PyYAML>=5.1",
-        "matplotlib>=3.1",
-        "pandas>=0.23.4",
+        "luigi>=2.8.7",
+        "pandas>=0.24.2",
         "psycopg2>=2.8.3",
-        "s3fs>=0.2.1",
+        "pyarrow>=0.14.0",
         "sqlalchemy==1.2.19",
     ],
 )

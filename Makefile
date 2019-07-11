@@ -28,6 +28,10 @@ lab:
 	@echo "Running jupyter lab in background..."
 	@$(VENV_DIR)/bin/jupyter lab --no-browser
 
+luigi:
+	@echo "Running luigi pipeline"
+	$(VENV_DIR)/bin/luigi --module iefp RunFull --local-scheduler
+
 lint:
 	@$(PYTHON_INTERPRETER) -m flake8 --max-line-length=90 ./src
 
