@@ -4,7 +4,7 @@ import pandas as pd
 def clean_string(column):
     "function to make string column lower case and remove characters defined in list"
     column = column.str.lower()
-    characters = ['(', ')', '-', '+', '  ']
+    characters = ['(', ')', '-', '+', '  ', '.']
     for char in characters:
         column = column.str.replace(char, "", case=False, regex=False)
 

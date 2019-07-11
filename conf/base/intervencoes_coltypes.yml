@@ -1,0 +1,14 @@
+bool_list:
+
+    
+date_list:
+    - data_movimento
+    - data_intervencao
+    
+dirty_string_list:
+    - f_dcurso
+    - f_dmod_form
+    - f_darea_form
+    
+object_date_list:
+    - data_resultado
