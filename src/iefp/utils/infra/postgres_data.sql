@@ -270,6 +270,11 @@ CREATE TABLE pedidos (
 CREATE INDEX pedidos_idx_ute_id on pedidos(ute_id);
 CREATE INDEX pedidos_idx_data_movimento on pedidos(data_movimento);
 CREATE INDEX pedidos_idx_ute_id_data_movimento on pedidos(ute_id, data_movimento);
+CREATE INDEX pedidos_idx_ano_mes on pedidos(ano_mes);
+CREATE INDEX pedidos_idx_tipo_movimento on pedidos(tipo_movimento);
+CREATE INDEX pedidos_idx_sexo on pedidos(sexo);
+CREATE INDEX pedidos_idx_centro on pedidos(centro);
+
 
 
 \copy pedidos from '/data/emp_pedidos.csv' with csv header; --37,317,447
@@ -527,7 +532,7 @@ CREATE TABLE intervencoes (
 	tipo_utente VARCHAR ,
 	ute_id DECIMAL ,
 	rmg VARCHAR ,
-	centro_movimento DECIMAL ,
+	centro_movimento VARCHAR ,
 	data_nascimento TIMESTAMP WITHOUT TIME ZONE,
 	data_inscricao TIMESTAMP WITHOUT TIME ZONE,
 	nacionalidade VARCHAR ,
@@ -551,7 +556,7 @@ CREATE TABLE intervencoes (
 	tipo_doc_id VARCHAR ,
 	tempo_pratica_ucnp DECIMAL,
 	tempo_pratica VARCHAR,
-	centro_np DECIMAL,
+	centro_np VARCHAR,
 	estado VARCHAR,
 	rsi VARCHAR,
 	ambito VARCHAR,
@@ -730,8 +735,8 @@ DROP TABLE IF EXISTS nacionalidade;
 CREATE TABLE nacionalidade (
 	cnacionalidade VARCHAR,
 	cnacionalidade_collapsed VARCHAR,
-	hnacionalidade VARCHAR NOT NULL,
-	dnacionalidade VARCHAR NOT NULL
+	hnacionalidade VARCHAR ,
+	dnacionalidade VARCHAR
 );
 
 \COPY nacionalidade from '/data/NACIONALIDADE.csv' with csv header; --200
@@ -754,11 +759,11 @@ CREATE TABLE motivos_suspensao_cessacao_subsidio (
 DROP TABLE IF EXISTS motivos_inscricao;
 
 CREATE TABLE motivos_inscricao (
-	cmotivo_inscricao DECIMAL NOT NULL,
-	dmotivo_inscricao VARCHAR NOT NULL,
-	ind_mot_insc DECIMAL NOT NULL,
+	cmotivo_inscricao DECIMAL ,
+	dmotivo_inscricao VARCHAR ,
+	ind_mot_insc DECIMAL ,
 	descricao VARCHAR,
-	hmotivo_inscricao VARCHAR NOT NULL
+	hmotivo_inscricao VARCHAR
 );
 
 \COPY motivos_inscricao from '/data/MOTIVOS_INSCRICAO.csv' with csv header; --29
@@ -767,11 +772,11 @@ CREATE TABLE motivos_inscricao (
 DROP TABLE IF EXISTS motivos_anulacao;
 
 CREATE TABLE motivos_anulacao (
-	cmotivo_anulacao DECIMAL NOT NULL,
-	dmotivo_anulacao VARCHAR NOT NULL,
+	cmotivo_anulacao DECIMAL ,
+	dmotivo_anulacao VARCHAR ,
 	motivos_anulacao_agg VARCHAR,
 	motivos_anul_agg_short VARCHAR,
-	hmotivo_anulacao VARCHAR NOT NULL
+	hmotivo_anulacao VARCHAR
 );
 
 \COPY motivos_anulacao from '/data/MOTIVOS_ANULACAO.csv' with csv header; --51
@@ -792,9 +797,235 @@ CREATE TABLE freguesia_nuts (
 DROP TABLE IF EXISTS cae_correspondence;
 
 CREATE TABLE cae_correspondence (
-	cae_divisao DECIMAL NOT NULL,
-	cae_seccao VARCHAR NOT NULL,
-	hcae VARCHAR NOT NULL
+	cae_divisao DECIMAL ,
+	cae_seccao VARCHAR ,
+	hcae VARCHAR
 );
 
 \COPY cae_correspondence from '/data/CAE_CORRESPONDENCE.csv' with csv header; --89
+
+--table get_utentes
+DROP TABLE IF EXISTS utentes;
+
+CREATE TABLE utentes (
+	id DECIMAL ,
+	estado VARCHAR,
+	motivo_candidatura DECIMAL,
+	motivo_anulacao DECIMAL,
+	data_candidatura TIMESTAMP WITHOUT TIME ZONE,
+	a_tempo VARCHAR,
+	natureza VARCHAR,
+	carteira_profissional VARCHAR,
+	formacao_profissional VARCHAR,
+	salario DECIMAL,
+	moeda VARCHAR,
+	tempo_ultimo_cnp DECIMAL,
+	divulgacao_pretendida VARCHAR,
+	qualificacao DECIMAL,
+	data_nascimento TIMESTAMP WITHOUT TIME ZONE,
+	estado_civil VARCHAR ,
+	sexo VARCHAR ,
+	pessoas_cargo DECIMAL,
+	data_inscricao TIMESTAMP WITHOUT TIME ZONE,
+	carta_conducao VARCHAR,
+	ppe VARCHAR ,
+	situacao_militar VARCHAR,
+	transporte_proprio VARCHAR,
+	data_nao_reinscricao TIMESTAMP WITHOUT TIME ZONE,
+	ute_type VARCHAR ,
+	ccentro DECIMAL ,
+	chabilitacao_escolar VARCHAR ,
+	cnp_utente DECIMAL,
+	cnacionalidade VARCHAR ,
+	cfreguesia VARCHAR ,
+	cdeficiencia DECIMAL ,
+	freguesia_outra VARCHAR,
+	cae DECIMAL,
+	cnp_principal DECIMAL,
+	ccategoria DECIMAL,
+	data_primeira_candidatura TIMESTAMP WITHOUT TIME ZONE,
+	salario_pretendido DECIMAL,
+	moeda_salario_pretendido VARCHAR,
+	freguesia_ultima_cnp VARCHAR,
+	ppe_anterior VARCHAR ,
+	motivo_inscricao_utente DECIMAL ,
+	tuc DECIMAL ,
+	estabelecimento VARCHAR,
+	desc_motivo_inscricao VARCHAR,
+	desc_motivo_anulacao VARCHAR,
+	data_anulacao TIMESTAMP WITHOUT TIME ZONE,
+	sub VARCHAR ,
+	def VARCHAR ,
+	area_formacao DECIMAL,
+	area_curso VARCHAR,
+	origem_insercao VARCHAR,
+	origem_candidatura VARCHAR,
+	rsi VARCHAR,
+	con_naturalidade DECIMAL,
+	ncd_naturalidade VARCHAR,
+	pae VARCHAR ,
+	motivo_indisponibilidade DECIMAL,
+	data_fim_indisponivel TIMESTAMP WITHOUT TIME ZONE,
+	ano_conclusao_curso DECIMAL,
+	feg VARCHAR,
+	ac VARCHAR,
+	tipo_feg DECIMAL,
+	conjuge_inscrito VARCHAR,
+	sigo VARCHAR,
+	tipo_ocupacao DECIMAL,
+	data_inicio_ocupacao TIMESTAMP WITHOUT TIME ZONE,
+	data_fim_ocupacao TIMESTAMP WITHOUT TIME ZONE,
+	categoria_ant DECIMAL,
+	tie DECIMAL,
+	ascendentes_a_cargo DECIMAL ,
+	descendentes_a_cargo DECIMAL,
+	agregado_monoparental VARCHAR,
+	utilizador VARCHAR,
+	data_atrib_gc TIMESTAMP WITHOUT TIME ZONE,
+	coeficiente_profiling DECIMAL,
+	segmento_atribuido VARCHAR,
+	segmento_automatico VARCHAR,
+	requerer_sd VARCHAR,
+	cpp_principal DECIMAL,
+	cpp_utente DECIMAL,
+	tempo_ultimo_cpp DECIMAL,
+	freguesia_ultima_cpp VARCHAR,
+	gj VARCHAR,
+	data_inicio_gj TIMESTAMP WITHOUT TIME ZONE,
+	data_primeira_resposta_gj TIMESTAMP WITHOUT TIME ZONE,
+	motivo_nao_sinalizacao_gj DECIMAL,
+	motivo_fim_gj DECIMAL,
+	data_fim_gj TIMESTAMP WITHOUT TIME ZONE,
+	gj_ant VARCHAR,
+	data_inicio_gj_ant TIMESTAMP WITHOUT TIME ZONE,
+	primeira_resposta_gj DECIMAL,
+	creation_date VARCHAR,
+	last_update_date TIMESTAMP WITHOUT TIME ZONE,
+	prim_resp_gj_inicial DECIMAL,
+	data_prim_resp_gj_inicial TIMESTAMP WITHOUT TIME ZONE,
+	data_inicio_agreg TIMESTAMP WITHOUT TIME ZONE,
+	n_agregado DECIMAL,
+	n_desempregados DECIMAL,
+	n_inativos DECIMAL,
+	n_criancas DECIMAL,
+	cv VARCHAR ,
+	validador VARCHAR,
+	util_tecnico_manual VARCHAR,
+	tempo_pratica DECIMAL
+);
+
+\COPY utentes from '/data/GET_UTENTES.csv' with csv header; --5,667,885
+
+CREATE INDEX utentes_idx_id on utentes(id);
+
+--table get_ppe
+DROP TABLE IF EXISTS action_plans;
+
+CREATE TABLE action_plans (
+	iti_id DECIMAL ,
+	estado_iti VARCHAR ,
+	ute_id DECIMAL ,
+	data_iti TIMESTAMP WITHOUT TIME ZONE,
+	numero_iti DECIMAL ,
+	responsavel VARCHAR ,
+	data_revisao TIMESTAMP WITHOUT TIME ZONE,
+	numero_etapa DECIMAL ,
+	codigo DECIMAL ,
+	estado_etapa VARCHAR ,
+	eco_id VARCHAR,
+	data_encaminhamento VARCHAR,
+	resultado_eco VARCHAR,
+	data_resultado_eco VARCHAR,
+	ito_id DECIMAL,
+	data_intervencao TIMESTAMP WITHOUT TIME ZONE,
+	resultado_ito DECIMAL,
+	data_resultado_ito TIMESTAMP WITHOUT TIME ZONE
+);
+
+\COPY action_plans from '/data/GET_PPE.csv' with csv header;
+
+--table get_ofertas
+DROP TABLE IF EXISTS get_ofertas;
+
+CREATE TABLE get_ofertas (
+	estado VARCHAR ,
+	salario DECIMAL,
+	moeda VARCHAR,
+	tipo_salario VARCHAR,
+	transporte_proprio VARCHAR,
+	data_inicio TIMESTAMP WITHOUT TIME ZONE,
+	data_comunicacao TIMESTAMP WITHOUT TIME ZONE,
+	natureza_emprego VARCHAR ,
+	a_tempo VARCHAR ,
+	duracao DECIMAL,
+	idade_min DECIMAL,
+	idade_max DECIMAL,
+	carta_conducao VARCHAR,
+	formacao_profissional VARCHAR,
+	data_apresentacao TIMESTAMP WITHOUT TIME ZONE,
+	saldo_postos DECIMAL ,
+	data_validade TIMESTAMP WITHOUT TIME ZONE,
+	qualificacoes DECIMAL,
+	data_insercao TIMESTAMP WITHOUT TIME ZONE,
+	nr_oferta DECIMAL ,
+	ccentro DECIMAL ,
+	cnp DECIMAL ,
+	habilitacao_minima VARCHAR,
+	habilitacao_maxima VARCHAR,
+	cnacionalidade VARCHAR,
+	nivel_divulgacao DECIMAL ,
+	data_ultima_divulgacao TIMESTAMP WITHOUT TIME ZONE,
+	bde_freguesia VARCHAR ,
+	bde_cae DECIMAL ,
+	bde_nr_pessoas_servico DECIMAL ,
+	area_recrutamento VARCHAR,
+	centro_ctn_n_p VARCHAR,
+	centro_ctn DECIMAL,
+	carteira_profissional VARCHAR,
+	sub_refeicao VARCHAR,
+	valor_sub_refeicao DECIMAL,
+	sub_turno VARCHAR,
+	valor_sub_turno DECIMAL,
+	sub_transporte VARCHAR,
+	valor_sub_transporte DECIMAL,
+	origem VARCHAR ,
+	tempo_pratica_min DECIMAL,
+	tempo_pratica_max VARCHAR,
+	tipo_oferta_lse VARCHAR ,
+	aceitar_bec VARCHAR,
+	motivo_suspensao VARCHAR,
+	data_suspensao TIMESTAMP WITHOUT TIME ZONE,
+	valida_apres_internet VARCHAR,
+	pe2012 VARCHAR,
+	interesse_estrategico VARCHAR,
+	cae_ett VARCHAR,
+	freguesia_ett VARCHAR,
+	concurso_publico_ett VARCHAR,
+	regime_horario VARCHAR,
+	cedencia_ett VARCHAR,
+	reducao_tsu VARCHAR,
+	nivel_intermediacao DECIMAL,
+	tipo_oferta VARCHAR ,
+	valor_diario_viagens VARCHAR,
+	pagamento_viagens VARCHAR,
+	experiencia_ant_exigida VARCHAR,
+	carta_conducao_necessaria VARCHAR,
+	apoio_alojamento VARCHAR,
+	valor_diario_alojamento VARCHAR,
+	startup VARCHAR,
+	tsu45 VARCHAR,
+	me2013 VARCHAR,
+	processo_recup_empresas VARCHAR,
+	reembolso_tsu VARCHAR,
+	cpp DECIMAL,
+	me2014 VARCHAR,
+	eao VARCHAR,
+	e_mais VARCHAR,
+	num_postos_trabalho_ini VARCHAR,
+	consentimento_eures VARCHAR,
+	recrutamento_eures VARCHAR,
+	creation_date VARCHAR,
+	last_update_date TIMESTAMP WITHOUT TIME ZONE
+);
+
+\COPY get_ofertas from '/data/GET_OFERTAS.csv' with csv header; --1,722,588
