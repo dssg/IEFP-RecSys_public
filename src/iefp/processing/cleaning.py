@@ -7,7 +7,6 @@ def clean_string(column):
     characters = ['(', ')', '-', '+', '  ', '.']
     for char in characters:
         column = column.str.replace(char, "", case=False, regex=False)
-
     return column
 
 
