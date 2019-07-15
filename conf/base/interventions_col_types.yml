@@ -2,7 +2,6 @@ bool_list:
 
     
 date_list:
-    - data_movimento
     - data_intervencao
     
 dirty_string_list:

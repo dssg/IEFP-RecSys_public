@@ -58,7 +58,7 @@ class ExtractInterventions(luigi.Task):
         concat_parquet(paths, self.output().path)
 
     def output(self):
-        return S3Target(self.s3path + "intervencoes.parquet")
+        return S3Target(self.s3path + "interventions.parquet")
 
 
 def concat_parquet(paths, s3path):
