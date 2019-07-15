@@ -1,10 +1,10 @@
 import luigi
 
-from iefp.processing.cleaning_task import CleanPedidos
+from iefp.intermediate.transform import TransformToJourneys
 from iefp.data.extract import ExtractInterventions
 
 
 class RunFull(luigi.WrapperTask):
     def requires(self):
-        yield CleanPedidos()
         yield ExtractInterventions()
+        yield TransformToJourneys()
