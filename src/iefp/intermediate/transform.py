@@ -45,7 +45,7 @@ class TransformToJourneys(luigi.Task):
         ]
 
         # NOTE: Convert to string for column join
-        df["tipo_movimento"] = df["tipo_movimento"].astype("str")
+        df["tipo_movimento"] = df["tipo_movimento"].astype("int").astype("str")
         df = df.pivot_table(
             index=["ute_id", "journey_count"], columns="tipo_movimento", aggfunc=np.min
         )

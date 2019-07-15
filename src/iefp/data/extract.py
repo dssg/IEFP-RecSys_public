@@ -6,8 +6,9 @@ import pandas as pd
 
 
 class ExtractPedidos(luigi.Task):
-
-    sigae_cols = yaml.load(open("./conf/base/sigae_columns.yml"), Loader=yaml.FullLoader)
+    sigae_cols = yaml.load(
+        open("./conf/base/sigae_columns.yml"), Loader=yaml.FullLoader
+    )
     buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
     s3path = buckets["intermediate"]["filter"]
 
@@ -25,7 +26,7 @@ class ExtractPedidos(luigi.Task):
     )
 
     def run(self):
-        paths = query_to_parquet(self.query, self.s3path, self.limit, "pedidos")
+        paths = query_to_parquet(self, chunks=10)
         concat_parquet(paths, self.output().path)
 
     def output(self):
@@ -33,8 +34,9 @@ class ExtractPedidos(luigi.Task):
 
 
 class ExtractInterventions(luigi.Task):
-
-    sigae_cols = yaml.load(open("./conf/base/sigae_columns.yml"), Loader=yaml.FullLoader)
+    sigae_cols = yaml.load(
+        open("./conf/base/sigae_columns.yml"), Loader=yaml.FullLoader
+    )
     buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
     s3path = buckets["intermediate"]["filter"]
 
@@ -52,7 +54,7 @@ class ExtractInterventions(luigi.Task):
     )
 
     def run(self):
-        paths = query_to_parquet(self.query, self.s3path, self.limit, "interventions")
+        paths = query_to_parquet(self, chunks=10)
         concat_parquet(paths, self.output().path)
 
     def output(self):
@@ -72,7 +74,7 @@ def concat_parquet(paths, s3path):
     df.to_parquet(s3path)
 
 
-def query_to_parquet(query, s3path, rows, table):
+def query_to_parquet(self, chunks):
     creds = yaml.load(open("./conf/local/credentials.yml"), Loader=yaml.FullLoader)
     pg_cred = creds["db"]
 
@@ -84,8 +86,8 @@ def query_to_parquet(query, s3path, rows, table):
 
     files = list()
     i = 0
-    for chunk in pd.read_sql(query, con, chunksize=rows / 10):
-        temp_path = s3path + "{}_temp{}.parquet".format(table, i)
+    for chunk in pd.read_sql(self.query, con, chunksize=(self.limit / chunks)):
+        temp_path = self.s3path + "{}_temp{}.parquet".format(self.table, i)
         chunk.to_parquet(temp_path)
         files.append(temp_path)
         i = i + 1

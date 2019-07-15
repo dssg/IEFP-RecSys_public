@@ -3,8 +3,8 @@ import pandas as pd
 
 def clean_string(df):
     """function to make string column lower case and remove characters defined in list"""
-    df = df.applymap(lambda s:s.lower() if type(s) == str else s)
-    characters = ['(', ')', '-', '+', '  ', '.']
+    df = df.applymap(lambda s: s.lower() if type(s) == str else s)
+    characters = ["(", ")", "-", "+", "  ", "."]
     for char in characters:
         df = df.apply(lambda s: s.replace(char, "", regex=False))
     return df
@@ -13,7 +13,7 @@ def clean_string(df):
 def object_to_date(column, inputformat):
     """converts object column to string, then to datetime, then to date"""
     column = column.astype("int64").astype("str")
-    column = pd.to_datetime(column, errors='coerce', format=inputformat)
+    column = pd.to_datetime(column, errors="coerce", format=inputformat)
     column = column.dt.date
     return column
 
