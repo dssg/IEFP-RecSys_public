@@ -1,8 +1,8 @@
-import luigi
 from luigi.contrib.s3 import S3Target
 from sqlalchemy import create_engine
-import yaml
+import luigi
 import pandas as pd
+import yaml
 
 
 class ExtractPedidos(luigi.Task):

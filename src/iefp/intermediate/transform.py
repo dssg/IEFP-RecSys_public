@@ -19,8 +19,9 @@ class TransformToJourneys(luigi.Task):
 
     def run(self):
         df = pd.read_parquet(self.input().path)
-        df = self.transform_journeys(df)
-        df.to_parquet(self.output().path)
+        df_journeys = self.transform_journeys(df)
+        df_journeys = self.add_demographics(df, df_journeys)
+        df_journeys.to_parquet(self.output().path)
 
     def transform_journeys(self, df):
         df = df.sort_values(["ute_id", "data_movimento"], ascending=True)
@@ -77,3 +78,25 @@ class TransformToJourneys(luigi.Task):
         df = df[df["journey_count"] > 0]
         df = df[(df["exit_date_21"].notna()) | (df["exit_date_31"].notna())]
         return df
+
+    def add_demographics(self, df, df_journey):
+        col_trans = yaml.load(
+            open("./conf/base/column_dict.yml"), Loader=yaml.FullLoader
+        )
+
+        df = df[df["tipo_movimento"] == 11]
+        df = df.groupby(["ute_id", "data_movimento"]).first()
+        df = df.drop_duplicates()
+
+        # Filter and rename columns
+        df = df[col_trans.keys()]
+        df = df.rename(col_trans, axis="columns")
+
+        df_journey = df_journey.merge(
+            df,
+            left_on=["user_id", "register_date"],
+            right_on=["ute_id", "data_movimento"],
+            how="left",
+        )
+
+        return df_journey
