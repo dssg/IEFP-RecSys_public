@@ -26,7 +26,7 @@ class CleanPedidos(luigi.Task):
 
     def run(self):
         df = pd.read_parquet(self.input().path)
-        clean(self, df)
+        df = clean(self, df)
         df.to_parquet(self.output().path)
 
     def output(self):
@@ -42,17 +42,17 @@ class CleanInterventions(luigi.Task):
     s3path = buckets["intermediate"]["clean"]
 
     # Load parameters
-    bool_list = interv_cols['bool_list']
-    date_list = interv_cols['date_list']
-    dirty_string_list = interv_cols['dirty_string_list']
-    object_date_list = interv_cols['object_date_list']
+    bool_list = interv_cols["bool_list"]
+    date_list = interv_cols["date_list"]
+    dirty_string_list = interv_cols["dirty_string_list"]
+    object_date_list = interv_cols["object_date_list"]
 
     def requires(self):
         return ExtractInterventions()
 
     def run(self):
         df = pd.read_parquet(self.input().path)
-        clean(self, df)
+        df = clean(self, df)
         df.to_parquet(self.output().path)
 
     def output(self):
@@ -67,13 +67,11 @@ def clean(self, df):
     # Check if there are objects which should be dates and convert if present
     if self.object_date_list:
         for col in self.object_date_list:
-            df[col] = processing.object_to_date(
-                df[col], "%Y-%m-%d %H:%M:%S"
-            )
+            df[col] = processing.object_to_date(df[col], "%Y-%m-%d %H:%M:%S")
 
     # Replace all None types with Pandas NaNs
-    df.replace(to_replace=[None], value=np.nan, inplace=True)
-    df.replace(to_replace="  ", value=np.nan, inplace=True)
+    df = df.replace(to_replace=[None], value=np.nan)
+    df = df.replace(to_replace="  ", value=np.nan)
 
     # Convert all appropriate column datatypes to int
     df_float = df.select_dtypes(exclude=["datetime"])
