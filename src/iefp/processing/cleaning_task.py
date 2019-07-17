@@ -13,7 +13,7 @@ class CleanPedidos(luigi.Task):
         open("./conf/base/pedidos_col_types.yml"), Loader=yaml.FullLoader
     )
     buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-    s3path = buckets["intermediate"]["clean"]
+    target_path = buckets["intermediate"]["clean"]
 
     # Load parameters
     bool_list = ped_cols["bool_list"]
@@ -30,7 +30,7 @@ class CleanPedidos(luigi.Task):
         df.to_parquet(self.output().path)
 
     def output(self):
-        return S3Target(self.s3path + "pedidos.parquet")
+        return S3Target(self.target_path + "pedidos.parquet")
 
 
 class CleanInterventions(luigi.Task):
@@ -39,7 +39,7 @@ class CleanInterventions(luigi.Task):
         open("./conf/base/interventions_col_types.yml"), Loader=yaml.FullLoader
     )
     buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-    s3path = buckets["intermediate"]["clean"]
+    target_path = buckets["intermediate"]["clean"]
 
     # Load parameters
     bool_list = interv_cols["bool_list"]
@@ -56,7 +56,7 @@ class CleanInterventions(luigi.Task):
         df.to_parquet(self.output().path)
 
     def output(self):
-        return S3Target(self.s3path + "interventions.parquet")
+        return S3Target(self.target_path + "interventions.parquet")
 
 
 def clean(self, df):
