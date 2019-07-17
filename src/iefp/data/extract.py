@@ -14,7 +14,7 @@ class ExtractPedidos(luigi.Task):
 
     table = "pedidos"
     cols = sigae_cols["pedidos"]
-    limit = 10000000
+    limit = 15000000
 
     query = """
     select {}
@@ -42,7 +42,7 @@ class ExtractInterventions(luigi.Task):
 
     table = "intervencoes"
     cols = sigae_cols["intervencoes"]
-    limit = 10000000
+    limit = 20000000
 
     query = """
     select {}
