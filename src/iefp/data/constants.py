@@ -1,0 +1,9 @@
+class Movement:
+    REGISTRATION = 11
+    JOB_PLACEMENT_IEFP = 21
+    CANCELLATION = 31
+    INTERVENTION_OUTCOME = 35
+
+
+class Status:
+    ACTIVE = "ACT"

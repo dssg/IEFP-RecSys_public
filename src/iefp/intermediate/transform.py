@@ -3,6 +3,7 @@ from luigi.contrib.s3 import S3Target
 import pandas as pd
 import yaml
 
+from iefp.data.constants import Movement, Status
 from iefp.processing import CleanPedidos
 
 
@@ -28,7 +29,7 @@ class AddDemographics(luigi.Task):
             open("./conf/base/column_dict.yml"), Loader=yaml.FullLoader
         )
 
-        df_pedidos = df_pedidos[df_pedidos["tipo_movimento"] == 11]
+        df_pedidos = df_pedidos[df_pedidos["tipo_movimento"] == Movement.REGISTRATION]
         df_pedidos = df_pedidos.sort_values(
             ["ute_id", "data_movimento"], ascending=True
         )
@@ -66,11 +67,16 @@ class TransformToJourneys(luigi.Task):
 
     def transform_journeys(self, df):
         df = df.sort_values(["ute_id", "data_movimento"], ascending=True)
-        df["journey_start"] = df["tipo_movimento"] == 11
+        df["journey_start"] = df["tipo_movimento"] == Movement.REGISTRATION
         df["journey_count"] = df.groupby("ute_id")["journey_start"].cumsum()
 
+        journey_codes = [
+            Movement.REGISTRATION,
+            Movement.JOB_PLACEMENT_IEFP,
+            Movement.CANCELLATION,
+        ]
         df = df.loc[
-            df["tipo_movimento"].isin([11, 21, 31]),
+            df["tipo_movimento"].isin(journey_codes),
             [
                 "ute_id",
                 "journey_count",
@@ -122,5 +128,5 @@ class TransformToJourneys(luigi.Task):
             & ((df["exit_date_21"].notna()) | (df["exit_date_31"].notna()))
         ]
         # Drop journeys of people that are not activly searching for emplpoyment
-        df = df[df["register_status"] == "ACT"]
+        df = df[df["register_status"] == Status.ACTIVE]
         return df
