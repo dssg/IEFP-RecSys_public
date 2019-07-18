@@ -92,6 +92,8 @@ class TransformToJourneys(luigi.Task):
         df["tipo_movimento"] = df["tipo_movimento"].astype("int").astype("str")
 
         # Assumption: Use first exit if multiple.
+        # Consequence: If start and end at the same day, even though
+        # there were later exit dates, these journeys will be filtered out.
         df = df.pivot_table(
             index=["ute_id", "journey_count"], columns="tipo_movimento", aggfunc="first"
         )
@@ -99,6 +101,9 @@ class TransformToJourneys(luigi.Task):
         df.columns = ["_".join(col).strip() for col in df.columns.values]
         df = df.reset_index()
 
+        #
+        # Translate columns
+        #
         cols_port = [
             "ute_id",
             "journey_count",
@@ -122,6 +127,10 @@ class TransformToJourneys(luigi.Task):
         df = df[cols_port]
         df.columns = cols_eng
 
+        #
+        # Filter
+        #
+
         # Drop journeys where we don't have data about start or end
         df = df[
             (df["register_date"].notna())
@@ -129,4 +138,24 @@ class TransformToJourneys(luigi.Task):
         ]
         # Drop journeys of people that are not activly searching for emplpoyment
         df = df[df["register_status"] == Status.ACTIVE]
+        df = df.drop(["register_status"], axis="columns")
+
+        # If person has an exit at the same date of registration or
+        # another exit later, set the same-day exit to NaT
+        df.loc[
+            (df.register_date == df.exit_date_21) & df.exit_date_31.notna(),
+            "exit_date_21",
+        ] = pd.NaT
+        df.loc[
+            (df.register_date == df.exit_date_31) & df.exit_date_21.notna(),
+            "exit_date_31",
+        ] = pd.NaT
+
+        # Drop journeys that start and end at the same day
+        df["one_day_journey"] = (df.register_date == df.exit_date_21) | (
+            df.exit_date_31 == df.register_date
+        )
+        df = df[df["one_day_journey"] == False]
+        df = df.drop(["one_day_journey"], axis="columns")
+
         return df
