@@ -26,7 +26,7 @@ class AddDemographics(luigi.Task):
 
     def add_demographics(self, df_pedidos, df_journey):
         dem_cols = yaml.load(
-            open("./conf/base/column_dict.yml"), Loader=yaml.FullLoader
+            open("./conf/base/demographic_translation.yml"), Loader=yaml.FullLoader
         )
 
         df_pedidos = df_pedidos[df_pedidos["tipo_movimento"] == Movement.REGISTRATION]

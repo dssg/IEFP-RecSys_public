@@ -11,6 +11,7 @@ setup(
         "pandas==0.24.2",
         "psycopg2==2.8.3",
         "pyarrow==0.14.0",
+        "scikit-learn==0.21.2",
         "sqlalchemy==1.2.19",
     ],
 )
