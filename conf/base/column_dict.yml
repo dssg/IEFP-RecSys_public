@@ -11,7 +11,7 @@ estado_civil: civil_status
 origem_registo_utente: registration_type
 nacionalidade: nationality
 freguesia: parish
-centro: center
+centroa: center_area
 subsidio: subsidy
 rsi: rsi
 ucpp: previous_cpp

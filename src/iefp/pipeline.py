@@ -1,8 +1,8 @@
 import luigi
 
-from iefp.intermediate.transform_interventions import TransformInterventions
+from iefp.modelling.add_mappings import AddModelMappings
 
 
 class RunFull(luigi.WrapperTask):
     def requires(self):
-        yield TransformInterventions()
+        yield AddModelMappings()
