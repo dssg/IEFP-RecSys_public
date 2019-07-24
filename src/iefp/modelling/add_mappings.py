@@ -35,6 +35,9 @@ class AddModelMappings(luigi.Task):
             open("./conf/base/college_mappings.yml"), Loader=yaml.FullLoader
         )
         college_mappings = {str(key): value for key, value in college_mappings.items()}
+        cpp_mappings = yaml.load(
+            open("./conf/base/cpp_mappings.yml"), Loader=yaml.FullLoader
+        )
 
         # Apply school mapping from Nova
         df["d_school_qualification"] = df["d_school_qualification"].map(school_mappings)
@@ -43,6 +46,17 @@ class AddModelMappings(luigi.Task):
         df["d_college_qualification"] = (
             df["d_college_qualification"].str[0].map(college_mappings)
         )
+
+        # Apply cpp / job code mappings for previous and desired job features
+        df["d_desired_job_sector"] = (
+            df.d_desired_cpp.dropna().astype(str).str[0].astype(int).map(cpp_mappings)
+        )
+        df["d_previous_job_sector"] = (
+            df.d_previous_cpp.dropna().astype(str).str[0].astype(int).map(cpp_mappings)
+        )
+
+        # Drop unnecessary columns
+        df.drop(columns=["d_desired_cpp", "d_previous_cpp"], inplace=True)
 
         # Apply boolean transformations
         df["d_disabled"] = df["d_disabled"] != 0.0
