@@ -3,18 +3,18 @@ from luigi.contrib.s3 import S3Target
 import pandas as pd
 import yaml
 
-from iefp.intermediate.transform_interventions import TransformInterventions
+from iefp.modelling import TranslateInterventions
 
 
-class AddModelMappings(luigi.Task):
-    buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-    s3path = buckets["modelling"]["map"]
-
+class AddMappings(luigi.Task):
     def requires(self):
-        return TransformInterventions()
+        return TranslateInterventions()
 
     def output(self):
-        return S3Target(self.s3path + "final_mappings.parquet")
+        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
+        s3path = buckets["modelling"]
+
+        return S3Target(s3path + "mappings.parquet")
 
     def run(self):
         df_intermediate = pd.read_parquet(self.input().path)

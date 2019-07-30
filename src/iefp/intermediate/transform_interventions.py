@@ -4,20 +4,20 @@ import pandas as pd
 import numpy as np
 import yaml
 
-from iefp.intermediate.add_outcomes import AddBinOutcome
+from iefp.intermediate import AddDemographics
 from iefp.processing import CleanInterventions
 from iefp.data.constants import Movement
 
 
 class TransformInterventions(luigi.Task):
-    buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-    s3path = buckets["intermediate"]["transform"]
-
     def requires(self):
-        return [CleanInterventions(), AddBinOutcome()]
+        return [CleanInterventions(), AddDemographics()]
 
     def output(self):
-        return S3Target(self.s3path + "intermediate.parquet")
+        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
+        s3path = buckets["intermediate"]["transform"]
+
+        return S3Target(s3path + "intermediate.parquet")
 
     def run(self):
         df_interventions = pd.read_parquet(self.input()[0].path)
@@ -27,22 +27,23 @@ class TransformInterventions(luigi.Task):
 
     def transform_interventions(self, df_interventions, df_journeys):
         """
-       Function adds interventions which occur within a jouney to the journey
-       and outcomes pd.dataframe
-        - param df_interventions: Cleaned and extracted interventions
-       pd.dataframe
-        - param df_journeys: Most recent journey pd.dataframe with outcomes
-       (one line per jouney)
+        Function adds interventions which occur within a jouney to the journey pd.dataframe
+
+        - param df_interventions: Cleaned and extracted interventions pd.dataframe
+        - param df_journeys: Most recent journey pd.dataframe with outcomes (one line per jouney)
         - return: Returns the intermediate layer as a wide pd.dataframe with journey
-       information, demographics, and outcomes and one date column for each
-       intervention code.
-       """
+        information, demographics, and outcomes and one date column for each
+        intervention code.
+        """
         success = yaml.load(open("./conf/base/successful_intervention_results.yml"))
-        recommendable_interventions = yaml.load(open("./conf/base/recommendable_interventions.yml"))
+        recommendable_interventions = yaml.load(
+            open("./conf/base/recommendable_interventions.yml")
+        )
 
         # Filter interventions
-        df_interventions = df_interventions[df_interventions.tipo_movimento ==
-                                            Movement.INTERVENTION_OUTCOME]
+        df_interventions = df_interventions[
+            df_interventions.tipo_movimento == Movement.INTERVENTION_OUTCOME
+        ]
         df_interventions = df_interventions[
             df_interventions.resultado_intervencao.isin(success)
         ]
@@ -60,12 +61,7 @@ class TransformInterventions(luigi.Task):
         df_interventions = df_interventions.set_index("ute_id")
         df_journeys = df_journeys.set_index("user_id")
         df_output = df_journeys[
-            [
-                "journey_count",
-                "register_date",
-                "exit_date_21",
-                "exit_date_31",
-            ]
+            ["journey_count", "register_date", "exit_date_21", "exit_date_31"]
         ].merge(df_interventions, how="inner", left_index=True, right_index=True)
 
         # Filter for interventions that occur between journey dates

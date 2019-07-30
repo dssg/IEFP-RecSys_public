@@ -1,9 +1,9 @@
 import luigi
 
 
-from iefp.intermediate.modelling_layer import TransformModelling
+from iefp.modelling import AddOutcomes
 
 
 class RunFull(luigi.WrapperTask):
     def requires(self):
-        yield TransformModelling()
+        yield AddOutcomes()
