@@ -5,7 +5,6 @@ bool_list:
     - rsi
 
 date_list:
-    - data_movimento
     - data_nascimento
 
 dirty_string_list:
