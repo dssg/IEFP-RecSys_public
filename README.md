@@ -79,6 +79,26 @@ db:
 
 ### Run Luigi pipeline
 
+We are using the Luigi pipeline framework in order to create a repeatable and reliable workflow from the raw data source to the model output (predictions and recommendations).
+
+The primary pipeline consists of several sub-pipelines which contain one or tasks:
+
+##### _Extraction pipeline_
+
+###### Extraction task: (data/extract.py)
+
+##### _Intermediate pipeline_
+
+###### Cleaning task:(processing/cleaning_task.py)
+###### Transform task(intermediate/transform_pedidos.py)
+###### Transform interventions task(intermediate/transform_interventions.py)
+
+##### _Modelling pipeline_
+
+###### Intervention codes task (modelling/intervention_codes.py)
+###### Mappings task (modelling/mappings.py)
+###### Outcomes task (modelling/outcomes.py)
+
 ``` bash
 > make luigi
 ```
