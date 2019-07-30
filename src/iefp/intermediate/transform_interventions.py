@@ -4,14 +4,14 @@ import pandas as pd
 import numpy as np
 import yaml
 
-from iefp.intermediate.add_outcomes import AddBinOutcome
+from iefp.intermediate import AddDemographics
 from iefp.processing import CleanInterventions
 from iefp.data.constants import Movement
 
 
 class TransformInterventions(luigi.Task):
     def requires(self):
-        return [CleanInterventions(), AddBinOutcome()]
+        return [CleanInterventions(), AddDemographics()]
 
     def output(self):
         buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)

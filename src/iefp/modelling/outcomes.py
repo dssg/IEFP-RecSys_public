@@ -4,18 +4,18 @@ import pandas as pd
 import yaml
 import numpy as np
 
-from iefp.intermediate.transform import AddDemographics
+from iefp.modelling import AddMappings
 
 
-class AddBinOutcome(luigi.Task):
-    buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-    target_path = buckets["intermediate"]["transform"]
-
+class AddOutcomes(luigi.Task):
     def requires(self):
-        return AddDemographics()
+        return AddMappings()
 
     def output(self):
-        return S3Target(self.target_path + "outcomes_journeys.parquet")
+        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
+        target_path = buckets["modelling"]
+
+        return S3Target(target_path + "modelling.parquet")
 
     def run(self):
         df_journeys = pd.read_parquet(self.input().path)

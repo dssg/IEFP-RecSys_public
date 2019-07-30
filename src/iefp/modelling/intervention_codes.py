@@ -3,18 +3,18 @@ from luigi.contrib.s3 import S3Target
 import pandas as pd
 import yaml
 
-from iefp.modelling.add_mappings import AddModelMappings
+from iefp.intermediate import TransformInterventions
 
 
-class TransformModelling(luigi.Task):
-    buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-    s3path = buckets["modelling"]["map"]
-
+class TranslateInterventions(luigi.Task):
     def requires(self):
-        return AddModelMappings()
+        return TransformInterventions()
 
     def output(self):
-        return S3Target(self.s3path + "modelling_layer.parquet")
+        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
+        s3path = buckets["modelling"]
+
+        return S3Target(s3path + "intervention_translate.parquet")
 
     def run(self):
         df = pd.read_parquet(self.input().path)
@@ -22,13 +22,13 @@ class TransformModelling(luigi.Task):
         df.to_parquet(self.output().path)
 
     def translate_intervention_codes(self, df):
-        '''
+        """
         Function to take in the intermediate layer and rename the columns
         which have an intervention code in them to the translated description
         of the intervention
         :param df: Pandas dataframe
         :return: Pandas dataframe
-        '''
+        """
         code_dict = yaml.load(open("./conf/base/intervention_translation_dict.yml"))
         df.columns = [col.replace("intervention_date_", "") for col in df.columns]
         code_dict = {str(key): code_dict[key] for key in code_dict}
