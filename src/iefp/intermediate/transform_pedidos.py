@@ -1,7 +1,8 @@
 import luigi
-from luigi.contrib.s3 import S3Target
 import pandas as pd
 import yaml
+
+from luigi.contrib.s3 import S3Target
 
 from iefp.data.constants import Category, Movement, RegistrationReason, Status
 from iefp.processing import CleanPedidos
@@ -42,8 +43,8 @@ class TransformToJourneys(luigi.Task):
         3. Group by journey-ends and their journey count
             Use first occuring start (if multiple ) as the start of the journey
 
-        - param df: Cleaned and extracted pedidos pd.dataframe
-        - return: Returns skeleton journeys dataframe
+        :param df: Cleaned and extracted pedidos pd.dataframe
+        :return: Skeleton journeys dataframe
         """
 
         df = df.sort_values(["ute_id", "data_movimento"], ascending=True)
@@ -91,11 +92,10 @@ class TransformToJourneys(luigi.Task):
             index=["ute_id", "journey_count"], columns="journey", aggfunc="first"
         )
 
-        # Format column names
+        # Format column names for better renaming
         df.columns = ["_".join(col).strip() for col in df.columns.values]
         df = df.reset_index()
 
-        # Filter and translate columns
         df = df[
             [
                 "ute_id",
@@ -125,7 +125,7 @@ class TransformToJourneys(luigi.Task):
             "exit_reason",
         ]
 
-        # Recount journeys
+        # Recount journeys, because we removed journeys in between
         df.journey_count = 1
         df["journey_count"] = df.groupby(["user_id"])["journey_count"].cumsum()
 
@@ -151,8 +151,8 @@ class FilterJourneys(luigi.Task):
         """
         Function filters out incomplete and invalid journeys from the journeys table
 
-        - param df: Skeleton journeys pd.dataframe
-        - return: Returns filered journeys dataframe
+        :param df: Skeleton journeys pd.dataframe
+        :return: Returns filered journeys dataframe
         """
 
         # Drop journeys of people that are not activly searching for emplpoyment
@@ -192,24 +192,27 @@ class AddDemographics(luigi.Task):
         Function adds demographic information to journeys table.
         Demographics are taken from the pedidos table at the time of the journey start
 
-        - param df: Filtered journeys pd.dataframe
-        - return: Returns journeys dataframe with demographic information
+        :param df: Filtered journeys pd.dataframe
+        :return: Returns journeys dataframe with demographic information
         """
         dem_cols = yaml.load(
             open("./conf/base/demographic_translation.yml"), Loader=yaml.FullLoader
         )
 
-        df_pedidos = df_pedidos[df_pedidos["tipo_movimento"] == Movement.REGISTRATION]
+        df_pedidos = df_pedidos[
+            df_pedidos["tipo_movimento"].isin(
+                [Movement.REGISTRATION, Movement.CATEGORY_CHANGE]
+            )
+        ]
         df_pedidos = df_pedidos.sort_values(
             ["ute_id", "data_movimento"], ascending=True
         )
-        df_pedidos = df_pedidos.groupby(["ute_id", "data_movimento"]).first()
-        df_pedidos = df_pedidos.drop_duplicates()
+        df_pedidos = df_pedidos.groupby(["ute_id", "data_movimento"]).last()
 
-        # Filter and rename columns
         df_pedidos = df_pedidos[dem_cols.keys()]
         df_pedidos = df_pedidos.rename(dem_cols, axis="columns")
 
+        df_pedidos = df_pedidos.reset_index()
         df_journey = df_journey.merge(
             df_pedidos,
             left_on=["user_id", "register_date"],
