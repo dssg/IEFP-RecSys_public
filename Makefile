@@ -41,8 +41,8 @@ requirements: venv
 ifneq ($(wildcard ./setup.py),)
 	$(PIP) install -e .
 endif
-ifneq ($(wildcard ./requirements.txt),)
-	$(PIP) install -r requirements.txt
+ifneq ($(wildcard ./requirements-dev.txt),)
+	$(PIP) install -r requirements-dev.txt
 endif
 	@echo "Installing jupyter kernel..."
 	@$(PYTHON_INTERPRETER) -m ipykernel install --sys-prefix --name=$(PROJECT_NAME)
