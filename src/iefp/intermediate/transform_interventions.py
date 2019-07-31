@@ -6,7 +6,6 @@ import yaml
 
 from iefp.intermediate import AddDemographics
 from iefp.processing import CleanInterventions
-from iefp.data.constants import Movement
 
 
 class TransformInterventions(luigi.Task):
@@ -42,9 +41,6 @@ class TransformInterventions(luigi.Task):
 
         # Filter interventions
         df_interventions = df_interventions[
-            df_interventions.tipo_movimento == Movement.INTERVENTION_OUTCOME
-        ]
-        df_interventions = df_interventions[
             df_interventions.resultado_intervencao.isin(success)
         ]
         df_interventions = df_interventions[
@@ -60,17 +56,14 @@ class TransformInterventions(luigi.Task):
         # Set index's and merge with basic journey info
         df_interventions = df_interventions.set_index("ute_id")
         df_journeys = df_journeys.set_index("user_id")
-        df_output = df_journeys[
-            ["journey_count", "register_date", "exit_date_21", "exit_date_31"]
-        ].merge(df_interventions, how="inner", left_index=True, right_index=True)
+        df_output = df_journeys[["journey_count", "register_date", "exit_date"]].merge(
+            df_interventions, how="inner", left_index=True, right_index=True
+        )
 
         # Filter for interventions that occur between journey dates
         df_output = df_output[
             (df_output.data_intervencao >= df_output.register_date)
-            & (
-                (df_output.data_intervencao <= df_output.exit_date_21)
-                | (df_output.data_intervencao <= df_output.exit_date_31)
-            )
+            & (df_output.data_intervencao <= df_output.exit_date)
         ]
         df_output = df_output[
             ["journey_count", "data_intervencao", "codigo_intervencao"]

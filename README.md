@@ -58,8 +58,7 @@ intermediate:
   filter: s3://**your-bucket**/intermediate/filter/
   clean: s3://**your-bucket**/intermediate/clean/
   transform: s3://**your-bucket**/intermediate/transform/
-modelling:
-  map: s3://**your-bucket**/modelling/mapping/
+modelling: s3://**your-bucket**/modelling/mapping/
 ```
 
 Check that your s3 credentials are present in your local aws credentials config file (_~/.aws/credentials.yml_) under the [default] key.
