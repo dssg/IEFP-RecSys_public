@@ -42,7 +42,7 @@ class ExtractInterventions(luigi.Task):
 
     table = "intervencoes"
     cols = sigae_cols["intervencoes"]
-    limit = 20000000
+    limit = 15000000
 
     query = """
     select {}
