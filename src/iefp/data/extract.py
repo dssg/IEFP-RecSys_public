@@ -13,15 +13,16 @@ class ExtractPedidos(luigi.Task):
         )
 
         table = "pedidos"
-        limit = 15000000
+        limit = 10000000
 
         query = """
         select {}
         from {}
+        where {}.tipo_movimento in (11, 31, 21, 43)
         order by ano_mes desc
         limit {}
         """.format(
-            ", ".join(sigae_cols[table]), table, limit
+            ", ".join(sigae_cols[table]), table, table, limit
         )
 
         paths = query_to_parquet(query, self.output().path, chunksize=limit / 10)
@@ -41,15 +42,16 @@ class ExtractInterventions(luigi.Task):
         )
 
         table = "intervencoes"
-        limit = 1500000
+        limit = 7500000
 
         query = """
         select {}
         from {}
+        where (({}.tipo_movimento = 35) and ({}.estado = 'ACT'))
         order by ano_mes desc
         limit {}
         """.format(
-            ", ".join(sigae_cols[table]), table, limit
+            ", ".join(sigae_cols[table]), table, table, table, limit
         )
 
         paths = query_to_parquet(query, self.output().path, chunksize=limit / 10)
