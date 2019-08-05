@@ -15,10 +15,11 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import auc, roc_curve
 from sklearn.metrics import f1_score
+from sklearn import svm
 
 from sklearn.linear_model import LogisticRegression, Lasso
-from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, GradientBoostingClassifier
-
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, GradientBoostingClassifier, AdaBoostClassifier
+from sklearn.tree import DecisionTreeClassifier
 
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
@@ -208,7 +209,7 @@ param_grid = [
 
 logreg_pipeline = Pipeline([
     ('scale', MinMaxScaler()),
-    ('logreg', LogisticRegression(penalty='l1', C=1e5)),
+    ('logreg', LogisticRegression(penalty='l1', C=1e5, class_weight="balanced", n_jobs=-1)),
 ])
 
 # LR Grid search
@@ -257,7 +258,7 @@ ada_param_grid = [
 
 svm_pipeline = Pipeline([
     ('scale', MinMaxScaler()),
-    ('svm', svm.SVC(kernel='linear', probability=True, random_state=0))
+    ('svm', svm.SVC(kernel='linear', probability=True, random_state=0, class_weight="balanced"))
 ])
 
 svm_param_grid = [
