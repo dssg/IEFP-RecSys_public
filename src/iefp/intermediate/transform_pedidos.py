@@ -125,10 +125,6 @@ class TransformToJourneys(luigi.Task):
             "exit_reason",
         ]
 
-        # Recount journeys, because we removed journeys in between
-        df.journey_count = 1
-        df["journey_count"] = df.groupby(["user_id"])["journey_count"].cumsum()
-
         return df
 
 

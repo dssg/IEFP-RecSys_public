@@ -22,6 +22,13 @@ class TransformInterventions(luigi.Task):
         df_interventions = pd.read_parquet(self.input()[0].path)
         df_journeys = pd.read_parquet(self.input()[1].path)
         df_journeys = self.transform_interventions(df_interventions, df_journeys)
+
+        # Recount journeys, because we removed journeys in between
+        df_journeys["journey_count"] = 1
+        df_journeys["journey_count"] = df_journeys.groupby(["user_id"])[
+            "journey_count"
+        ].cumsum()
+
         df_journeys.to_parquet(self.output().path)
 
     def transform_interventions(self, df_interventions, df_journeys):

@@ -1,8 +1,9 @@
 import luigi
-from luigi.contrib.s3 import S3Target
 import pandas as pd
 import numpy as np
 import yaml
+
+from luigi.contrib.s3 import S3Target
 
 from iefp.data.constants import Movement
 from iefp.modelling import AddMappings
@@ -16,7 +17,7 @@ class AddOutcomes(luigi.Task):
         buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
         target_path = buckets["modelling"]
 
-        return S3Target(target_path + "modelling.parquet")
+        return S3Target(target_path + "outcomes.parquet")
 
     def run(self):
         df_journeys = pd.read_parquet(self.input().path)
