@@ -12,6 +12,7 @@
 328: i_invest_young_target_promoter
 329: i_invest_young_another_promoter
 394: i_other_employment_program
+402: i_scholarship_training_initiative_worker
 404: i_insertion_companies
 416: i_professional_internships
 427: i_internship_job
@@ -20,12 +21,14 @@
 430: i_arts_and_crafts_train
 506: i_employment-insertion_contract
 507: i_employment_contract_insertion
+509: i_cei_patrimony
 602: i_vocational_train_disabilities_cgd
 603: i_vocational_train_disabilities_cgp
 610: i_post-placement_monitoring
 611: i_information_job_eval_orientat
 612: i_occupational_rehabilitation
 613: i_integration_stages_disabilities
+614: i_contract_employment_insertion_disability
 615: i_open_market_supported_employment
 700: i_learning
 703: i_learning_cgp
@@ -44,8 +47,8 @@
 770: i_efa_contin_train_type_b3
 771: i_efa_contin_train_type_b2_b3
 772: i_efa_s3_type_a
-777: i_modular
 778: i_contin_train_modular_extra_catalogue
+779: i_efa_s_type_a
 784: i_efa_n2_vocational_train
 785: i_efa_n3_vocational_train
 791: i_basic_skills_train
@@ -61,3 +64,9 @@
 9904: i_professional_internships_extra_iefp
 9906: i_pepal_stages_extra_iefp
 9907: i_cei_prevpap_extra_iefp
+1000: i_efa
+777: i_training_continous_modular
+777796: i_training_technical_communication_job_search
+777797: i_training_entrepreneurship_technol_job_search
+777804: i_training_feg_technological_expertise 
+777777: i_training_feg_professional

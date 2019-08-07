@@ -29,7 +29,10 @@ class TranslateInterventions(luigi.Task):
         :param df: Pandas dataframe
         :return: Pandas dataframe
         """
-        code_dict = yaml.load(open("./conf/base/intervention_translation_dict.yml"))
+        code_dict = yaml.load(
+            open("./conf/base/intervention_translation_dict.yml"),
+            Loader=yaml.FullLoader,
+        )
         df.columns = [col.replace("intervention_date_", "") for col in df.columns]
         code_dict = {str(key): code_dict[key] for key in code_dict}
         df = df.rename(columns=code_dict)
