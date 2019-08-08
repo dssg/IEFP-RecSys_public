@@ -32,7 +32,9 @@ class EvaluateRandomForest(luigi.Task):
             metrics=metrics,
             features=X_test.columns.tolist(),
             date=self.date,
-            filepath=self.input()[1].path,
+            model_path=self.input()[1].path,
+            train_data_path=self.input()[0][2].path,
+            test_data_path=self.input()[0][3].path,
         )
         # NOTE: Set task as completed manually. Use the build-in
         # luigi.contrib.postgres.CopyToTable Task would the right.

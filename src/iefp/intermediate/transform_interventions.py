@@ -60,6 +60,9 @@ class TransformInterventions(luigi.Task):
         :param df_interventions: cleaned pandas interventions dataframe
         :return: pandas dataframe
         """
+        df_interventions["codigo_intervencao"] = df_interventions[
+            "codigo_intervencao"
+        ].astype(int)
         df_777_training = df_interventions.loc[
             (df_interventions["codigo_intervencao"] == Interventions.TRAINING)
             & (df_interventions["f_cmod_form"].notna()),

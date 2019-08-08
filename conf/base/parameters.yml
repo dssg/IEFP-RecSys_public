@@ -1,5 +1,9 @@
 # Parameters to be used in the pipeline
 
+data_set:
+  # NOTE: Default value is the start of the extracted dataset
+  start: "2017-01-01"
+
 rf_large_grid:
   n_estimators: [100, 1000, 10000]
   max_depth: [2, 3, 5, 10]

@@ -15,7 +15,7 @@ class TrainRandomForest(luigi.Task):
     date = luigi.DateSecondParameter(default=datetime.now())
 
     def requires(self):
-        return SplitTrainTest()
+        return SplitTrainTest(self.date)
 
     def output(self):
         buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)

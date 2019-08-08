@@ -25,8 +25,17 @@ class CreateModellingTable(luigi.Task):
         df_feats = self.transform_features(df_journeys)
 
         df_model = df_feats.merge(df_interventions, right_index=True, left_index=True)
-        df_model = df_model.reset_index().drop("user_id", axis="columns")
 
+        # NOTE: Cut-off modeling table at specified time.
+        # Old data influence model performance
+        modelling_params = yaml.load(
+            open("./conf/base/parameters.yml"), Loader=yaml.FullLoader
+        )
+        df_model = df_model[
+            df_model["register_date"] >= modelling_params["data_set"]["start"]
+        ].reset_index()
+
+        df_model = df_model.drop(["user_id", "register_date"], axis="columns")
         df_model = self.drop_empty_cols(df_model)
         df_model = self.set_target_variables(df_model)
 
@@ -105,7 +114,6 @@ class CreateModellingTable(luigi.Task):
             "category"
         )
         df_feats["register_year"] = df_feats["register_date"].dt.year.astype("category")
-        df_feats = df_feats.drop("register_date", axis="columns")
 
         df_feats["register_reason"] = df_feats["register_reason"].astype("category")
         df_feats["d_school_qualification"] = df_feats["d_school_qualification"].astype(

@@ -19,26 +19,26 @@ def get_db_engine():
     return engine
 
 
-def get_best_model_path(metric="f1"):
+def get_best_model_paths(metric="f1"):
     """
     Queries database for the best mode
 
     :param query: Evaluation metric as string:
         'f1', 'accuracy', 'precision', 'recall'
-    :return: S3path of model location
+    :return tuple: S3path of model, train_set, test_set
     """
     table = Database.EVALUATION_TABLE
     query = """
-    select file_path
+    select model_path, train_data_path, test_data_path
     from {}
-    order by {}
+    order by ({}, date_run) desc
     limit 1
     """.format(
         table, "m_{}".format(metric)
     )
 
     res = query_db(query)
-    return res.first()[0]
+    return res.first()[:3]
 
 
 def query_db(query):
@@ -53,7 +53,9 @@ def query_db(query):
         return con.execute(query)
 
 
-def model_info_to_db(engine, model, metrics, features, date, filepath):
+def model_info_to_db(
+    engine, model, metrics, features, date, model_path, train_data_path, test_data_path
+):
     """
     Writes model information including evaluation metrics to evaluation table
 
@@ -76,7 +78,9 @@ def model_info_to_db(engine, model, metrics, features, date, filepath):
         "features": str(features).replace("'", '"').replace("[", "{").replace("]", "}"),
         "hyperparameters": json.dumps(model.get_params()),
         "date_run": date,
-        "file_path": filepath,
+        "model_path": model_path,
+        "train_data_path": train_data_path,
+        "test_data_path": test_data_path,
     }
     data.update(metrics)
 
