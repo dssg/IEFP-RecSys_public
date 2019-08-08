@@ -4,6 +4,7 @@ import yaml
 
 from luigi.contrib.s3 import S3Target
 
+from iefp.data.constants import Database
 from iefp.data import get_db_engine
 
 
@@ -13,8 +14,8 @@ class ExtractPedidos(luigi.Task):
             open("./conf/base/sigae_columns.yml"), Loader=yaml.FullLoader
         )
 
-        table = "pedidos"
-        limit = 10000000
+        table = Database.PEDIDOS_TABLE
+        limit = Database.PEDIDOS_EXTRACTION_SIZE
 
         query = """
         select {}
@@ -42,8 +43,8 @@ class ExtractInterventions(luigi.Task):
             open("./conf/base/sigae_columns.yml"), Loader=yaml.FullLoader
         )
 
-        table = "intervencoes"
-        limit = 7500000
+        table = Database.INTERVENTIONS_TABLE
+        limit = Database.INTERVENTIONS_EXTRACTION_SIZE
 
         query = """
         select {}
@@ -69,6 +70,8 @@ def concat_parquet(paths, s3path):
     dfs = []
     for path in paths:
         df = pd.read_parquet(path)
+        # NOTE: Convert to datetime seconds because the fastparquet engine
+        # can not handle datetime nanoseconds.
         df_dates = df.select_dtypes("datetime")
         df_dates = df_dates.astype("datetime64[s]")
         df[df_dates.columns] = df_dates

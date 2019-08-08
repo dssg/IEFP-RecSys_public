@@ -1,34 +1,91 @@
+import luigi
+import numpy as np
 import pandas as pd
+import yaml
+
+from luigi.contrib.s3 import S3Target
+
+from iefp.data.extract import ExtractPedidos, ExtractInterventions
+from iefp.processing.constants import PedidosColumns, InterventionColumns
 
 
-def clean_string(df):
-    """function to make string column lower case and remove characters defined in list"""
-    df = df.applymap(lambda s: s.lower() if type(s) == str else s)
-    characters = ["(", ")", "-", "+", "  ", "."]
-    for char in characters:
-        df = df.apply(lambda s: s.replace(char, "", regex=False))
+class CleanPedidos(luigi.Task):
+    def requires(self):
+        return ExtractPedidos()
+
+    def output(self):
+        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
+        target_path = buckets["intermediate"]["clean"]
+        return S3Target(target_path + "pedidos.parquet")
+
+    def run(self):
+        df = pd.read_parquet(self.input().path)
+        df = clean(df, bool_cols=PedidosColumns.BOOLEAN)
+        df.to_parquet(self.output().path)
+
+
+class CleanInterventions(luigi.Task):
+    def requires(self):
+        return ExtractInterventions()
+
+    def output(self):
+        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
+        target_path = buckets["intermediate"]["clean"]
+        return S3Target(target_path + "interventions_trial.parquet")
+
+    def run(self):
+        df = pd.read_parquet(self.input().path)
+        df = clean(df, string_cols=InterventionColumns.STRING)
+        df.to_parquet(self.output().path)
+
+
+def clean(df, bool_cols=None, string_cols=None):
+    """
+    General cleaning workflow for different columns types
+
+    :param df: DataFrame
+    :param bool_cols: List of boolean columns with S/N instead of T/F
+    :param string_cols: List of string columns that should be cleaned
+    :return: Cleaned DataFrame
+    """
+    if string_cols:
+        df[string_cols] = clean_string(df[string_cols])
+
+    if bool_cols:
+        df = bool_convert(df, bool_cols)
+
+    df = df.replace("  ", " ").replace(" ", np.nan)
+    df = df.replace([None], np.nan)
+    df = df.drop_duplicates()
     return df
 
 
-def object_to_date(column, inputformat):
-    """converts object column to string, then to datetime, then to date"""
-    column = column.astype("int64").astype("str")
-    column = pd.to_datetime(column, errors="coerce", format=inputformat)
-    column = column.dt.date
-    return column
+def clean_string(df):
+    """
+    Cleans string columns of dataframe
 
 
-def bool_convert(dataframe, bool_list):
-    """maps yes/no fields to 1/0 and then converts to boolean"""
-    bool_dict = {"S": 1, "N": 0}
+    :param df: DataFrame with string columns
+    :return: Cleaned DataFrame
+    """
+    characters = ["(", ")", "-", "+", "."]
+    for char in characters:
+        df = df.apply(
+            lambda s: s.str.strip().str.lower().replace(char, "", regex=False)
+        )
+
+    return df
+
+
+def bool_convert(df, bool_list):
+    """
+    Maps S(im) N(ao) fields to True and False
+
+
+    :param bool_list: List of S/N boolean columns
+    :return: Converted DataFrame
+    """
+    bool_dict = {"S": True, "N": False}
     for col in bool_list:
-        dataframe[col] = dataframe[col].map(bool_dict)
-        dataframe[col] = dataframe[col].astype(bool)
-    return dataframe
-
-
-def strip_time(dataframe, date_list):
-    """strips time element from datetime columns"""
-    for date_col in date_list:
-        dataframe[date_col] = pd.to_datetime(dataframe[date_col].dt.date)
-    return dataframe
+        df[col] = df[col].map(bool_dict)
+    return df

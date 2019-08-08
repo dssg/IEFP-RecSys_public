@@ -31,3 +31,7 @@ class Status:
 
 class Database:
     EVALUATION_TABLE = "modeling.evaluations"
+    INTERVENTIONS_EXTRACTION_SIZE = 10000000
+    INTERVENTIONS_TABLE = "intervencoes"
+    PEDIDOS_EXTRACTION_SIZE = 15000000
+    PEDIDOS_TABLE = "pedidos"

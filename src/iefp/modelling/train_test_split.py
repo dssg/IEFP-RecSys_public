@@ -49,11 +49,12 @@ class SplitTrainTest(luigi.Task):
             "exit_date", axis="columns"
         )
 
-        # Resample into training set for a larger training data
+        # Resample into training set to to 80/20 ratio if test set is larger
         test_size = round((len(df_train) + len(df_test)) * 0.2)
-        df_sample = df_test.sample(n=(len(df_test) - test_size), random_state=1)
-        df_test = df_test.drop(df_sample.index)
-        df_train = df_train.append(df_sample)
+        if len(df_test) > test_size:
+            df_sample = df_test.sample(n=(len(df_test) - test_size), random_state=1)
+            df_test = df_test.drop(df_sample.index)
+            df_train = df_train.append(df_sample)
 
         return df_train, df_test
 
