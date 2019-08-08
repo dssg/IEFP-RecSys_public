@@ -1,9 +1,9 @@
 import luigi
 
 
-from iefp.modelling import SplitTrainTest
+from iefp.modelling import EvaluateRandomForest
 
 
 class RunFull(luigi.WrapperTask):
     def requires(self):
-        yield SplitTrainTest()
+        yield EvaluateRandomForest()

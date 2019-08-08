@@ -3,7 +3,8 @@ import pandas as pd
 import yaml
 
 from luigi.contrib.s3 import S3Target
-from sqlalchemy import create_engine
+
+from iefp.data import get_db_engine
 
 
 class ExtractPedidos(luigi.Task):
@@ -78,18 +79,11 @@ def concat_parquet(paths, s3path):
 
 
 def query_to_parquet(query, s3path, chunksize):
-    creds = yaml.load(open("./conf/local/credentials.yml"), Loader=yaml.FullLoader)
-    pg_cred = creds["db"]
-
-    url = "postgresql://{}:{}@{}:{}/{}"
-    url = url.format(
-        pg_cred["pg_user"], pg_cred["pg_pass"], pg_cred["pg_host"], 5432, "iefp"
-    )
-    con = create_engine(url, client_encoding="utf8")
+    engine = get_db_engine()
 
     files = list()
     i = 0
-    for chunk in pd.read_sql(query, con, chunksize=chunksize):
+    for chunk in pd.read_sql(query, engine, chunksize=chunksize):
         temp_path = s3path + "_temp{}".format(i)
         chunk.to_parquet(temp_path)
         files.append(temp_path)

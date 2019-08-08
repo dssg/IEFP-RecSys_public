@@ -5,3 +5,4 @@ intermediate:
   clean: s3://iefp-unemployment/intermediate/clean/
   transform: s3://iefp-unemployment/intermediate/transform/
 modelling: s3://iefp-unemployment/modelling/
+models: s3://iefp-unemployment/models/

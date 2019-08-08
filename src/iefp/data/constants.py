@@ -27,3 +27,7 @@ class RegistrationReason:
 
 class Status:
     ACTIVE = "ACT"
+
+
+class Database:
+    EVALUATION_TABLE = "modeling.evaluations"

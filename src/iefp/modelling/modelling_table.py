@@ -108,6 +108,9 @@ class CreateModellingTable(luigi.Task):
         df_feats = df_feats.drop("register_date", axis="columns")
 
         df_feats["register_reason"] = df_feats["register_reason"].astype("category")
+        df_feats["d_school_qualification"] = df_feats["d_school_qualification"].astype(
+            "category"
+        )
 
         df_feats = pd.get_dummies(df_feats, drop_first=True, dummy_na=True)
 
