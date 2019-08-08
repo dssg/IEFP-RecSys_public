@@ -30,7 +30,7 @@ class TransformInterventions(luigi.Task):
 
         # Recount journeys, because we removed journeys in between
         df_output["journey_count"] = 1
-        df_output"journey_count"] = df_output.groupby(["user_id"])[
+        df_output["journey_count"] = df_output.groupby(["user_id"])[
             "journey_count"
         ].cumsum()
         df_output.to_parquet(self.output().path)
