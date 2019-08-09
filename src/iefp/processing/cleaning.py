@@ -31,7 +31,7 @@ class CleanInterventions(luigi.Task):
     def output(self):
         buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
         target_path = buckets["intermediate"]["clean"]
-        return S3Target(target_path + "interventions_trial.parquet")
+        return S3Target(target_path + "interventions.parquet")
 
     def run(self):
         df = pd.read_parquet(self.input().path)
