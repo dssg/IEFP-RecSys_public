@@ -107,9 +107,12 @@ CREATE TABLE ofertas (
 	last_update_date VARCHAR
 );
 
+\copy ofertas from '/data/EMP_OFERTAS.csv' with csv header; --
+
+--we copy first so that it wont take too much time, then we create the index.
 CREATE INDEX ofertas_idx_nr_oferta on ofertas(nr_oferta);
 
-\copy ofertas from '/data/EMP_OFERTAS.csv' with csv header; --
+
 
 --table pedidos
 drop table if exists pedidos;
@@ -267,6 +270,8 @@ CREATE TABLE pedidos (
 	last_update_date VARCHAR
 );
 
+\copy pedidos from '/data/emp_pedidos.csv' with csv header; --37,317,447
+
 CREATE INDEX pedidos_idx_ute_id on pedidos(ute_id);
 CREATE INDEX pedidos_idx_data_movimento on pedidos(data_movimento);
 CREATE INDEX pedidos_idx_ute_id_data_movimento on pedidos(ute_id, data_movimento);
@@ -275,9 +280,6 @@ CREATE INDEX pedidos_idx_tipo_movimento on pedidos(tipo_movimento);
 CREATE INDEX pedidos_idx_sexo on pedidos(sexo);
 CREATE INDEX pedidos_idx_centro on pedidos(centro);
 
-
-
-\copy pedidos from '/data/emp_pedidos.csv' with csv header; --37,317,447
 
 --table apresentados
 DROP TABLE IF EXISTS apresentados;
@@ -395,11 +397,13 @@ CREATE TABLE apresentados (
 	last_update_date VARCHAR
 );
 
+\COPY apresentados from '/data/MOV_APRESENTADOS.csv' with csv header; --13,989,614
+
 CREATE INDEX apresentados_idx_ute_id on apresentados(ute_id);
 CREATE INDEX apresentados_idx_nr_oferta on apresentados(nr_oferta);
 CREATE INDEX apresentados_idx_data_movimento on apresentados(data_movimento);
 
-\COPY apresentados from '/data/MOV_APRESENTADOS.csv' with csv header; --13,989,614
+
 
 --table convocados
 DROP TABLE IF EXISTS convocados;
@@ -499,12 +503,13 @@ CREATE TABLE convocados (
 	last_update_date VARCHAR
 );
 
+\COPY  convocados from '/data/MOV_CONVOCADOS.csv' with csv header; --38,498,895
+
 
 CREATE INDEX convocados_idx_ute_id on convocados(ute_id);
 CREATE INDEX convocados_idx_nr_oferta on convocados(nr_oferta);
 CREATE INDEX convocados_idx_data_movimento on convocados(data_movimento);
 
-\COPY  convocados from '/data/MOV_CONVOCADOS.csv' with csv header; --38,498,895
 
 --table intervencoes
 DROP TABLE IF EXISTS intervencoes;
@@ -640,6 +645,9 @@ CREATE TABLE intervencoes (
 CREATE INDEX intervencoes_idx_ute_id on intervencoes(ute_id);
 CREATE INDEX intervencoes_idx_ano_mes on intervencoes(ano_mes);
 CREATE INDEX intervencoes_idx_data_movimento on intervencoes(data_movimento);
+CREATE INDEX intervencoes_idx_estado on intervencoes(estado);
+CREATE INDEX intervencoes_idx_tipo_movimento on intervencoes(tipo_movimento);
+CREATE INDEX intervencoes_idx_ute_id on intervencoes(ute_id);
 
 --table estatisticos
 DROP TABLE IF EXISTS estatisticos;
@@ -655,6 +663,7 @@ CREATE TABLE estatisticos (
 
 CREATE INDEX estatisticos_idx_ctipo_movimento on estatisticos(ctipo_movimento);
 CREATE INDEX estatisticos_idx_tipo_movimento on estatisticos(tipo_movimento);
+
 
 --table tipos_intervencoes
 DROP TABLE IF EXISTS tipos_intervencoes;
@@ -681,11 +690,13 @@ CREATE TABLE tipos_intervencoes (
 	tipo_movimento DECIMAL
 );
 
-CREATE INDEX intervencoes_idx_codigo_interv on tipos_intervencoes(codigo_interv);
-CREATE INDEX intervencoes_idx_dcodigo_interv on tipos_intervencoes(dcodigo_interv);
-CREATE INDEX intervencoes_idx_tipo on tipos_intervencoes(tipo);
-
 \COPY tipos_intervencoes from '/data/TIPOS_INTERVENCOES.csv' with csv header; --484
+
+CREATE INDEX tipos_intervencoes_idx_codigo_interv on tipos_intervencoes(codigo_interv);
+CREATE INDEX tipos_intervencoes_idx_dcodigo_interv on tipos_intervencoes(dcodigo_interv);
+CREATE INDEX tipos_intervencoes_idx_tipo on tipos_intervencoes(tipo);
+
+
 
 --table resultado_intervencaoes
 DROP TABLE IF EXISTS resultado_intervencoes;
@@ -943,6 +954,8 @@ CREATE TABLE action_plans (
 );
 
 \COPY action_plans from '/data/GET_PPE.csv' with csv header;
+
+CREATE INDEX action_plans_idx_codidgo on action_plans(codigo);
 
 --table get_ofertas
 DROP TABLE IF EXISTS get_ofertas;
