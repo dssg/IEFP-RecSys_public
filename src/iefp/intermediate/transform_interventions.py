@@ -25,6 +25,7 @@ class TransformInterventions(luigi.Task):
         df_interventions = self.add_training(df_interventions)
         df_interventions = self.group_training(df_interventions)
         df_interventions = self.filter_interventions(df_interventions)
+        df_interventions = self.map_old_new_interventions(df_interventions)
         df_journeys = pd.read_parquet(self.input()[1].path)
         df_output = self.transform_interventions(df_interventions, df_journeys)
 
@@ -63,6 +64,7 @@ class TransformInterventions(luigi.Task):
         df_interventions["codigo_intervencao"] = df_interventions[
             "codigo_intervencao"
         ].astype(int)
+
         df_777_training = df_interventions.loc[
             (df_interventions["codigo_intervencao"] == Interventions.TRAINING)
             & (df_interventions["f_cmod_form"].notna()),
@@ -78,7 +80,6 @@ class TransformInterventions(luigi.Task):
         df_interventions.loc[df_777_training.index, :] = df_777_training.loc[
             df_777_training.index, :
         ]
-
         return df_interventions
 
     def group_training(self, df_interventions):
@@ -123,7 +124,35 @@ class TransformInterventions(luigi.Task):
         df_interventions = df_interventions[
             df_interventions["codigo_intervencao"].isin(recommendable_interventions)
         ]
+        return df_interventions
 
+    def map_old_new_interventions(self, df_interventions):
+        """
+        Function maps old intevrention codes to new ones using a yaml dictionary.
+        If an old intervention can be mapped to 2 new ones, all get given the same
+        code (that of the most popular new intervention code).
+
+        :param df_interventions: the interventions pandas dataframe
+        :return: pandas dataframe
+        """
+
+        df_interventions.reset_index(inplace=True)
+
+        old_new_dict = yaml.load(
+            open("./conf/base/old_new_intervention_mappings.yml"),
+            Loader=yaml.FullLoader,
+        )
+
+        old_new_dict = {key: old_new_dict[key] for key in old_new_dict}
+
+        old = df_interventions.loc[
+            (df_interventions.codigo_intervencao.isin(list(old_new_dict.keys()))),
+            "codigo_intervencao",
+        ]
+
+        old = old.replace(to_replace=old_new_dict)
+
+        df_interventions.loc[old.index, "codigo_intervencao"] = old
         return df_interventions
 
     def transform_interventions(self, df_interventions, df_journeys):
