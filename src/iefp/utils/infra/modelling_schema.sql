@@ -24,3 +24,14 @@ CREATE TABLE modelling.evaluations(
 );
 
 CREATE INDEX evaluations_pkey on evaluations(model_id);
+
+--table recommendation_errors: we store the error for the recommendations emitted
+DROP TABLE IF EXISTS modelling.recommendation_errors;
+
+CREATE TABLE modelling.recommendation_errors(
+    recommendation_error_id serial,
+    model_id integer,
+    error float,
+    parameters json,
+    primary key(recommendation_error_id)
+);
