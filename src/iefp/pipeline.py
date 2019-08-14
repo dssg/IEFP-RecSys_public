@@ -1,9 +1,9 @@
 import luigi
 
 
-from iefp.modelling import EvaluateRandomForest
+from iefp.recommendation import EvaluateRecommendations
 
 
 class RunFull(luigi.WrapperTask):
     def requires(self):
-        yield EvaluateRandomForest()
+        yield EvaluateRecommendations()

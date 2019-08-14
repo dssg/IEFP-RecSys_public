@@ -94,3 +94,40 @@ def model_info_to_db(
     )
 
     query_db(query)
+
+
+def rec_eval_info_to_db(engine, error, model_id, parameters):
+    """
+    Writes model information including evaluation metrics to evaluation table
+
+    :param engine: Sqlalchemy database engine
+    :param error: Trained scikit-learn model
+    :param model_id: List of feature names
+    :param parameters: Dictionary of evaluation parameters in the form of
+        parameters = {
+        
+        set_size = parameters["set_size"]
+        num_recs = parameters["num_recs"]
+        percent_sample = parameters["percent_sample"]
+        
+            "set_size": recommendation set size,
+            "num_recs": number of recommendation sets returned,
+            "percent_sample": percentage of the sample we evaluate recommendations for
+        }
+    """
+
+    table = Database.RECOMMENDATION_ERRORS_TABLE
+    data = {"model_id": model_id, "error": error, "parameters": json.dumps(parameters)}
+
+    query = """
+    insert into {} ({})
+    values ({}, {}, '{}')
+    """.format(
+        table,
+        ", ".join([str(v) for v in data.keys()]),
+        model_id,
+        error,
+        json.dumps(parameters),
+    )
+
+    query_db(query)

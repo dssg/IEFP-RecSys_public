@@ -16,3 +16,8 @@ rf_small_grid:
     n_estimators: [1000]
     max_depth: [2, 3]
     min_samples_split: [2, 3]
+
+evaluation_params:
+    set_size: 3
+    num_recs: 1
+    percent_sample: 0.005
