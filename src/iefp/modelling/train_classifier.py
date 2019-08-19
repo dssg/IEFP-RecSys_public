@@ -4,11 +4,58 @@ import yaml
 
 from datetime import datetime
 from luigi.contrib.s3 import S3Target
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 
 from iefp.data import write_object_to_s3
 from iefp.modelling import SplitTrainTest
+
+
+class TrainGradientBoosting(luigi.Task):
+    date = luigi.DateSecondParameter(default=datetime.now())
+
+    def requires(self):
+        return SplitTrainTest(self.date)
+
+    def output(self):
+        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
+        target_path = buckets["models"]
+
+        return S3Target(
+            target_path
+            + "{date:%Y/%m/%d/gradient_boosting_T%H%M%S.pkl}".format(date=self.date)
+        )
+
+    def run(self):
+        df_train = pd.read_parquet(self.input()[0].path)
+        y_train = df_train.loc[:, "ttj_sub_12"]
+        X_train = df_train.drop(["ttj", "ttj_sub_12"], axis="columns")
+
+        grid = yaml.load(open("./conf/base/parameters.yml"), Loader=yaml.FullLoader)[
+            "rf_small_grid"
+        ]
+        model = self.train_gb_cv(X_train, y_train, scoring_metric="f1", grid=grid)
+
+        write_object_to_s3(model, self.output().path)
+
+    def train_gb_cv(self, X, y, scoring_metric, grid=dict()):
+        """
+        Runs grid search on a random forest classifier
+
+        :param X: Feature matrix of training set
+        :param y: Target vector of training set
+        :param scoring_metric: Single metric from which we choose the best classifier
+        :param grid: Cross validation grid
+        :return: Best trained model after grid search
+        """
+        gb = GradientBoostingClassifier(random_state=0)
+        gb_grid_search = GridSearchCV(
+            gb, grid, scoring=scoring_metric, cv=5, refit=True
+        )
+        gb_grid_search.fit(X, y)
+
+        return gb_grid_search.best_estimator_
 
 
 class TrainRandomForest(luigi.Task):
@@ -55,3 +102,49 @@ class TrainRandomForest(luigi.Task):
         rf_grid_search.fit(X, y)
 
         return rf_grid_search.best_estimator_
+
+
+class TrainLogisticRegression(luigi.Task):
+    date = luigi.DateSecondParameter(default=datetime.now())
+
+    def requires(self):
+        return SplitTrainTest(self.date)
+
+    def output(self):
+        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
+        target_path = buckets["models"]
+
+        return S3Target(
+            target_path
+            + "{date:%Y/%m/%d/logistic_regression_T%H%M%S.pkl}".format(date=self.date)
+        )
+
+    def run(self):
+        df_train = pd.read_parquet(self.input()[0].path)
+        y_train = df_train.loc[:, "ttj_sub_12"]
+        X_train = df_train.drop(["ttj", "ttj_sub_12"], axis="columns")
+
+        grid = yaml.load(open("./conf/base/parameters.yml"), Loader=yaml.FullLoader)[
+            "lg_small_grid"
+        ]
+        model = self.train_rf_cv(X_train, y_train, scoring_metric="f1", grid=grid)
+
+        write_object_to_s3(model, self.output().path)
+
+    def train_rf_cv(self, X, y, scoring_metric, grid=dict()):
+        """
+        Runs grid search on logistic regression
+
+        :param X: Feature matrix of training set
+        :param y: Target vector of training set
+        :param scoring_metric: Single metric from which we choose the best classifier
+        :param grid: Cross validation grid
+        :return: Best trained model after grid search
+        """
+        lg = LogisticRegression(random_state=0, solver="liblinear")
+        lg_grid_search = GridSearchCV(
+            lg, grid, scoring=scoring_metric, cv=5, refit=True
+        )
+        lg_grid_search.fit(X, y)
+
+        return lg_grid_search.best_estimator_

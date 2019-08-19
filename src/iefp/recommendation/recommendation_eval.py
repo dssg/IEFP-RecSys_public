@@ -1,28 +1,94 @@
-import boto3
 import luigi
-import math
-import numpy as np
-import os
 import pandas as pd
-import pickle
-import time
 import yaml
 
 from datetime import datetime
 from sklearn.base import BaseEstimator
 
-from iefp.data.postgres import rec_eval_info_to_db, query_db, get_db_engine
-from iefp.data.constants import Database
-from iefp.data.s3 import read_object_from_s3
-from iefp.recommendation import (
-    get_top_recommendations,
-    generate_combinations,
-    calculate_top_interventions,
+from iefp.data.postgres import (
+    get_db_engine,
+    get_model_info_by_path,
+    write_recommendation_eval,
 )
+from iefp.data.s3 import read_object_from_s3
 from iefp.modelling import EvaluateRandomForest, TrainRandomForest
+from iefp.modelling import EvaluateLogisticRegression, TrainLogisticRegression
+from iefp.modelling import EvaluateGradientBoosting, TrainGradientBoosting
+from iefp.recommendation import get_top_recommendations
 
 
-class EvaluateRecommendations(luigi.Task):
+class EvaluateRecommendationsGB(luigi.Task):
+    date = luigi.DateSecondParameter(default=datetime.now())
+    task_complete = False
+
+    def requires(self):
+        return [TrainGradientBoosting(self.date), EvaluateGradientBoosting(self.date)]
+
+    def run(self):
+        params = yaml.load(open("./conf/base/parameters.yml"), Loader=yaml.FullLoader)[
+            "evaluation_params"
+        ]
+
+        model = read_object_from_s3(self.input()[0].path)
+        model_id, test_path, train_path = get_model_info_by_path(self.input()[0].path)
+
+        df_train = pd.read_parquet(train_path)
+        df_test = pd.read_parquet(test_path)
+
+        rec_error = get_aggregate_recommendation_error(
+            df_train,
+            df_test,
+            model,
+            params["set_size"],
+            params["num_recs"],
+            params["percent_sample"],
+        )
+
+        write_recommendation_eval(get_db_engine(), rec_error, model_id, params)
+        self.task_complete = True
+
+    def complete(self):
+        return self.task_complete
+
+
+class EvaluateRecommendationsLG(luigi.Task):
+    date = luigi.DateSecondParameter(default=datetime.now())
+    task_complete = False
+
+    def requires(self):
+        return [
+            TrainLogisticRegression(self.date),
+            EvaluateLogisticRegression(self.date),
+        ]
+
+    def run(self):
+        params = yaml.load(open("./conf/base/parameters.yml"), Loader=yaml.FullLoader)[
+            "evaluation_params"
+        ]
+
+        model = read_object_from_s3(self.input()[0].path)
+        model_id, test_path, train_path = get_model_info_by_path(self.input()[0].path)
+
+        df_train = pd.read_parquet(train_path)
+        df_test = pd.read_parquet(test_path)
+
+        rec_error = get_aggregate_recommendation_error(
+            df_train,
+            df_test,
+            model,
+            params["set_size"],
+            params["num_recs"],
+            params["percent_sample"],
+        )
+
+        write_recommendation_eval(get_db_engine(), rec_error, model_id, params)
+        self.task_complete = True
+
+    def complete(self):
+        return self.task_complete
+
+
+class EvaluateRecommendationsRF(luigi.Task):
     date = luigi.DateSecondParameter(default=datetime.now())
     task_complete = False
 
@@ -30,38 +96,26 @@ class EvaluateRecommendations(luigi.Task):
         return [TrainRandomForest(self.date), EvaluateRandomForest(self.date)]
 
     def run(self):
-        # Get db entry of most recent model
-        results = query_db(
-            "SELECT * FROM {} WHERE model_path='{}';".format(
-                Database.EVALUATION_TABLE, self.input()[0].path
-            )
-        )
-        result = results.fetchone()
+        params = yaml.load(open("./conf/base/parameters.yml"), Loader=yaml.FullLoader)[
+            "evaluation_params"
+        ]
 
-        # Model and data paths
-        model_id = result["model_id"]
-        model_path = result["model_path"]
-        test_path = result["train_data_path"]
-        train_path = result["test_data_path"]
-        parameters = yaml.load(
-            open("./conf/base/parameters.yml"), Loader=yaml.FullLoader
-        )["evaluation_params"]
+        model = read_object_from_s3(self.input()[0].path)
+        model_id, test_path, train_path = get_model_info_by_path(self.input()[0].path)
 
         df_train = pd.read_parquet(train_path)
         df_test = pd.read_parquet(test_path)
-        model = read_object_from_s3(model_path)
 
-        # Evaluation parameters
-        set_size = parameters["set_size"]
-        num_recs = parameters["num_recs"]
-        percent_sample = parameters["percent_sample"]
-
-        error = get_aggregate_recommendation_error(
-            df_train, df_test, model, set_size, num_recs, percent_sample
+        rec_error = get_aggregate_recommendation_error(
+            df_train,
+            df_test,
+            model,
+            params["set_size"],
+            params["num_recs"],
+            params["percent_sample"],
         )
 
-        rec_eval_info_to_db(get_db_engine(), error, model_id, parameters)
-
+        write_recommendation_eval(get_db_engine(), rec_error, model_id, params)
         self.task_complete = True
 
     def complete(self):

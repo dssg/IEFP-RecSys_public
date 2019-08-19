@@ -41,6 +41,27 @@ def get_best_model_paths(metric="f1"):
     return res.first()[:3]
 
 
+def get_model_info_by_path(path):
+    """
+    Get model information by it's path
+
+    :param path: string of model path
+    :return tuple: model_id, test dataset path, train dataset path
+    """
+    results = query_db(
+        "SELECT * FROM {} WHERE model_path='{}';".format(
+            Database.EVALUATION_TABLE, path
+        )
+    )
+    result = results.fetchone()
+
+    # Model and data paths
+    model_id = result["model_id"]
+    test_path = result["train_data_path"]
+    train_path = result["test_data_path"]
+    return model_id, test_path, train_path
+
+
 def query_db(query):
     """
     Executes an sql string query
@@ -96,7 +117,7 @@ def model_info_to_db(
     query_db(query)
 
 
-def rec_eval_info_to_db(engine, error, model_id, parameters):
+def write_recommendation_eval(engine, error, model_id, parameters):
     """
     Writes model information including evaluation metrics to evaluation table
 
@@ -105,11 +126,9 @@ def rec_eval_info_to_db(engine, error, model_id, parameters):
     :param model_id: List of feature names
     :param parameters: Dictionary of evaluation parameters in the form of
         parameters = {
-        
         set_size = parameters["set_size"]
         num_recs = parameters["num_recs"]
         percent_sample = parameters["percent_sample"]
-        
             "set_size": recommendation set size,
             "num_recs": number of recommendation sets returned,
             "percent_sample": percentage of the sample we evaluate recommendations for

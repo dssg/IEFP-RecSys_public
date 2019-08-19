@@ -8,7 +8,44 @@ from iefp.data import model_info_to_db
 from iefp.data import read_object_from_s3
 from iefp.data import get_db_engine
 from iefp.modelling import SplitTrainTest
-from iefp.modelling import TrainRandomForest
+from iefp.modelling import (
+    TrainRandomForest,
+    TrainLogisticRegression,
+    TrainGradientBoosting,
+)
+
+
+class EvaluateGradientBoosting(luigi.Task):
+    date = luigi.DateSecondParameter(default=datetime.now())
+    task_complete = False
+
+    def requires(self):
+        return [SplitTrainTest(), TrainGradientBoosting(self.date)]
+
+    def run(self):
+        df_test = pd.read_parquet(self.input()[0][1].path)
+        y_test = df_test.loc[:, "ttj_sub_12"]
+        X_test = df_test.drop(["ttj", "ttj_sub_12"], axis="columns")
+
+        rf = read_object_from_s3(self.input()[1].path)
+        metrics = evaluate(rf, X_test, y_test)
+
+        model_info_to_db(
+            engine=get_db_engine(),
+            model=rf,
+            metrics=metrics,
+            features=X_test.columns.tolist(),
+            date=self.date,
+            model_path=self.input()[1].path,
+            train_data_path=self.input()[0][2].path,
+            test_data_path=self.input()[0][3].path,
+        )
+        # NOTE: Set task as completed manually. Use the build-in
+        # luigi.contrib.postgres.CopyToTable Task would the right.
+        self.task_complete = True
+
+    def complete(self):
+        return self.task_complete
 
 
 class EvaluateRandomForest(luigi.Task):
@@ -17,6 +54,39 @@ class EvaluateRandomForest(luigi.Task):
 
     def requires(self):
         return [SplitTrainTest(), TrainRandomForest(self.date)]
+
+    def run(self):
+        df_test = pd.read_parquet(self.input()[0][1].path)
+        y_test = df_test.loc[:, "ttj_sub_12"]
+        X_test = df_test.drop(["ttj", "ttj_sub_12"], axis="columns")
+
+        rf = read_object_from_s3(self.input()[1].path)
+        metrics = evaluate(rf, X_test, y_test)
+
+        model_info_to_db(
+            engine=get_db_engine(),
+            model=rf,
+            metrics=metrics,
+            features=X_test.columns.tolist(),
+            date=self.date,
+            model_path=self.input()[1].path,
+            train_data_path=self.input()[0][2].path,
+            test_data_path=self.input()[0][3].path,
+        )
+        # NOTE: Set task as completed manually. Use the build-in
+        # luigi.contrib.postgres.CopyToTable Task would the right.
+        self.task_complete = True
+
+    def complete(self):
+        return self.task_complete
+
+
+class EvaluateLogisticRegression(luigi.Task):
+    date = luigi.DateSecondParameter(default=datetime.now())
+    task_complete = False
+
+    def requires(self):
+        return [SplitTrainTest(), TrainLogisticRegression(self.date)]
 
     def run(self):
         df_test = pd.read_parquet(self.input()[0][1].path)
