@@ -168,12 +168,12 @@ def get_sub_group(df: pd.DataFrame, observation: pd.Series):
         "old_senior",
         "old",
         "d_nationality_other",
+        "d_school_qualification_1.0",
         "d_school_qualification_2.0",
         "d_school_qualification_3.0",
         "d_school_qualification_4.0",
         "d_school_qualification_5.0",
-        "d_school_qualification_6.0",
-        "d_school_qualification_nan",
+        "d_school_qualification_6.0"
     ]
 
     sub_group = df.merge(journey[dems], on=dems, right_index=True, how="inner")

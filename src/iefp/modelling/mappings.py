@@ -41,7 +41,10 @@ class AddMappings(luigi.Task):
         school_mappings = yaml.load(
             open("./conf/base/school_mappings.yml"), Loader=yaml.FullLoader
         )
-        school_mappings = {str(key): value for key, value in school_mappings.items()}
+        school_mappings = {
+            ("0" + str(key) if len(str(key)) == 1 else str(key)): (value)
+            for key, value in school_mappings.items()
+        }
         df["d_school_qualification"] = df["d_school_qualification"].map(school_mappings)
 
         # NOTE: Take first digit of cpp for mapping
