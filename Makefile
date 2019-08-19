@@ -1,4 +1,4 @@
-.PHONY: clean lint requirements jupyter lab venv
+.PHONY: clean database lint requirements jupyter lab venv
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -19,6 +19,10 @@ all: clean requirements
 clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
+
+
+database:
+	./deploy/setup_postgres.sh
 
 jupyter:
 	@echo "Running jupyter notebook in background..."

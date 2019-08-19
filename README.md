@@ -20,12 +20,33 @@ The Data Science for Social Good Fellowship is a summer program to train aspirin
 
 For three months they learn, hone, and apply their data science, analytical, and coding skills, collaborate in a fast-paced atmosphere, and learn from mentors coming from industry and academia.
 
+## Minimum infrastructure requirements
+
+It is recommended to run the project with the infracstruture hosted on AWS. It has been tested with the
+following system specifications:
+
+```
+- EC2 instance: c4.4xlarge
+    - vCPU: 16
+    - RAM: 30 GB
+    - OS: ubuntu 18.04 LTS
+    - Volumes: 1
+    - Type: gp2
+    - Size: 100 GB
+- RDS: PostgreSQL
+    - Engine: PostgreSQL
+    - Engine version: 10.6
+    - Instance: db.t2.xlarge
+    - vCPU: 4
+    - RAM: 16 GB
+    - Storage: 150 GB
+```
+
+**Note:** The database system is required to be PostgreSQL, but does not have to be hosted on AWS.
+
+**Caution:** Due to the size of the data it is recommended to have an EC2 instance with RAM size of 30GB or more.
+
 ## Installation and setup
-
-### Minimum system requirements
-
-Operating system: Developed on Ubuntu 18.04 (other recent linux distros should work but are untested)
-RAM: 30GB+ (due to the memory intensive data extraction process)
 
 ### Clone the Repository
 
@@ -33,25 +54,53 @@ RAM: 30GB+ (due to the memory intensive data extraction process)
 > git clone https://github.com/dssg/IEFP-RecSys
 ```
 
-### Install required Packages
+### Install required system packages
+- [GNU make](https://gnu.org/software/make)
+- [python3 >= 3.6](https://packages.ubuntu.com/bionic/python3)
+- [python3-dev](https://packages.ubuntu.com/bionic/python3-dev) (Header files to
+    compile python packages)
+- [python3-venv](https://packages.ubuntu.com/bionic/python3-venv) (In case it is
+    not installed with python3 by your package manager)
+- [jq](https://github.com/stedolan/jq)
+- [postgresql-client](https://www.postgresql.org/docs/9.3/app-psql.html)
+- [gcc](https://packages.ubuntu.com/bionic/gcc)
+- [libpg-dev](https://www.postgresql.org/docs/11/libpq.html)
 
-Installs virtual environment and dependencies with `pip`:
+For example:
 
 ```bash
-> make requirements
+> sudo apt update
+> sudo apt install make gcc jq libpg-dev postgresql-client postgresql-client python3 python3-dev python3-venv
 ```
 
-### Run Jupyter Lab
 
-``` bash
-> make lab
+### Credentials Setup
+
+1. Add PostgreSQL credentials to `IEFP-RecSys/conf/local/credentials.yml`.
+
+For example:
+``` yaml
+db:
+    pg_user: my_user
+    pg_pass: my_password
+    pg_host: name.id.region.rds.amazonaws.com
+    pg_name: iefp
+    pg_port: 5432
+```
+- **NOTE:** Make sure the PostgreSQL has a Database with the specified name
+    (e.g. `iefp`) created and the specified user has read/write access to it.
+
+2. Check that your aws s3 credentials are present in the local credentials file (`~/.aws/credentials`) under the `[default]` key.
+
+```
+[default]
+  aws_access_key_id = ****
+  aws_secret_access_key = ****
 ```
 
-### Add infrastructure parameters
+### S3 Bucket
 
-#### s3
-
-Add the path to your s3 buckets in /conf/base/buckets.yml
+Add the path to your s3 buckets in `IEFP-RecSys/conf/base/buckets.yml`
 
 ``` yaml
 intermediate:
@@ -61,56 +110,75 @@ intermediate:
 modelling: s3://**your-bucket**/modelling/mapping/
 ```
 
-Check that your s3 credentials are present in your local aws credentials config file (_~/.aws/credentials.yml_) under the [default] key.
+### Data Setup
 
-#### Postgres
+Get a dump of SIGAE data to `IEFP-RecSys/data/`. Required files are:
 
-Postgres is used as an intermediate step in our data extraction pipeline. For more details see our Wiki [page](https://github.com/dssg/IEFP-RecSys/wiki/Pipeline-Overview).
+- `EMP_PEDIDOS.csv`
+- `MOV_INTERVENCOES.csv`
 
-Add Postgres credentials to /conf/local/credentials.yml
+## Run the Project
 
-``` yaml
-db:
-    pg_user: ******
-    pg_pass: ******
-    pg_host: ******
+### Install required python packages
+
+Installs virtual environment and dependencies with `pip`:
+
+```bash
+> make requirements
 ```
+
+### Create database tables
+
+Trigger a script that creates the required database tables and copy the data.
+
+```bash
+> make database
+```
+
 
 ### Run Luigi pipeline
 
-We are using the Luigi pipeline framework in order to create a repeatable and reliable workflow from the raw data source to the model output (predictions and recommendations).
+We are using the Luigi pipeline framework in order to create a repeatable and reliable workflow from the raw data source to the model output (predictions, recommendations and evaluations).
 
-The primary pipeline consists of several sub-pipelines which contain one or tasks:
+Run the pipeline with:
 
-##### _Extraction pipeline_
+```bash
+> make luigi
+```
 
-###### Extraction task: (data/extract.py)
+### Use the command line:
+```bash
+> source env/bin/activate
+> iefp-recsys --help
+Usage: iefp-recsys [OPTIONS]
 
-##### _Intermediate pipeline_
+IEFP Intervention Recommender.
 
-###### Cleaning task:(processing/cleaning_task.py)
-###### Transform task(intermediate/transform_pedidos.py)
-###### Transform interventions task(intermediate/transform_interventions.py)
+Options:
+-r, --recommendations INTEGER  Number of recommendations
+-s, --set-size INTEGER         Maximum number of interventions in a recommended set
+--help                         Show this message and exit.
+> iefp-recsys --recommendations 10 --set-size 3
+```
 
-##### _Modelling pipeline_
+### Run Jupyter Lab
 
-###### Intervention codes task (modelling/intervention_codes.py)
-###### Mappings task (modelling/mappings.py)
-###### Outcomes task (modelling/outcomes.py)
+We are using [Jupyter Lab](https://github.com/jupyterlab/jupyterlab) for
+exploratory data analysis and fast prototyping. Run it with:
 
 ``` bash
-> make luigi
+> make lab
 ```
 
 ### Partners
 
-#### IEFP (Instituto de Emprego e Formação Profissional) | Key Partner
-#### NOVA School of Business and Economics | Handover Partner
+- IEFP (Instituto de Emprego e Formação Profissional) | Key Partner
+- Nova School of Business & Economics | Handover Partner
 
 ## Contributors
 
-Rosa Lavelle-Hill, Nathan Coulson, Tobias Richter
+Rosa Lavelle-Hill, Nathan Coulson, Tobias Richter, Liliana Millán
 
 ## License
 
-A short snippet describing the license
+MIT License - Copyright 2019 Nova School of Business & Economics

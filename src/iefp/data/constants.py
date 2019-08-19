@@ -30,8 +30,8 @@ class Status:
 
 
 class Database:
-    EVALUATION_TABLE = "modeling.evaluations"
-    RECOMMENDATION_ERRORS_TABLE = "modeling.recommendation_errors"
+    EVALUATION_TABLE = "modelling.evaluations"
+    RECOMMENDATION_ERRORS_TABLE = "modelling.recommendation_errors"
     INTERVENTIONS_EXTRACTION_SIZE = 10000000
     INTERVENTIONS_TABLE = "intervencoes"
     PEDIDOS_EXTRACTION_SIZE = 15000000
