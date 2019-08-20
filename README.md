@@ -64,22 +64,26 @@ following system specifications:
 - [jq](https://github.com/stedolan/jq)
 - [postgresql-client](https://www.postgresql.org/docs/9.3/app-psql.html)
 - [gcc](https://packages.ubuntu.com/bionic/gcc)
-- [libpg-dev](https://www.postgresql.org/docs/11/libpq.html)
+- [libpq-dev](https://www.postgresql.org/docs/11/libpq.html)
 
 For example:
 
 ```bash
 > sudo apt update
-> sudo apt install make gcc jq libpg-dev postgresql-client postgresql-client python3 python3-dev python3-venv
+> sudo apt install make gcc jq libpq-dev postgresql-client postgresql-client python3 python3-dev python3-venv
 ```
 
 
 ### Credentials Setup
 
-1. Add PostgreSQL credentials to `IEFP-RecSys/conf/local/credentials.yml`.
+Add your PostgreSQL credentials, AWS credentials and the S3 bucket name to `IEFP-RecSys/conf/local/credentials.yml`.
 
 For example:
 ``` yaml
+aws:
+    aws_access_key_id: ****
+    aws_secret_access_key: ***
+    s3_bucket_name: iefp
 db:
     pg_user: my_user
     pg_pass: my_password
@@ -89,26 +93,8 @@ db:
 ```
 - **NOTE:** Make sure the PostgreSQL has a Database with the specified name
     (e.g. `iefp`) created and the specified user has read/write access to it.
-
-2. Check that your aws s3 credentials are present in the local credentials file (`~/.aws/credentials`) under the `[default]` key.
-
-```
-[default]
-  aws_access_key_id = ****
-  aws_secret_access_key = ****
-```
-
-### S3 Bucket
-
-Add the path to your s3 buckets in `IEFP-RecSys/conf/base/buckets.yml`
-
-``` yaml
-intermediate:
-  filter: s3://**your-bucket**/intermediate/filter/
-  clean: s3://**your-bucket**/intermediate/clean/
-  transform: s3://**your-bucket**/intermediate/transform/
-modelling: s3://**your-bucket**/modelling/mapping/
-```
+- **NOTE:** Make sure the S3 bucket with the specified name is
+    (e.g. `iefp`) created and the specified user has read/write access to it.
 
 ### Data Setup
 
@@ -119,21 +105,50 @@ Get a dump of SIGAE data to `IEFP-RecSys/data/`. Required files are:
 
 ## Run the Project
 
+### Install virtual environment
+
+Installs virtual environment using python3-venv:
+
+```bash
+> cd IEFP-RecSys
+> make venv
+
+```
+
+**Optional:** Manually activate the virtual environment. This is generally not
+needed for the setup of this project.
+
+```bash
+> source env/bin/activate
+```
+
 ### Install required python packages
 
-Installs virtual environment and dependencies with `pip`:
+Installs packages and dependencies into the virtual environment with `pip`:
 
 ```bash
 > make requirements
 ```
 
-### Create database tables
 
-Trigger a script that creates the required database tables and copy the data.
+### Create database tables
+Trigger a script that creates tables for the raw data on the specified PostgreSQL
+database and copy the data from the `IEFP-RecSys/data/` directory into it.
+Depending on the datasize this can take approx. 10 - 20 minutes.
 
 ```bash
 > make database
 ```
+
+The scripts creates two tables `pedidos` and `intervencoes`. Each table has
+approx. 150 features. See the [deployment
+script](https://github.com/dssg/IEFP-RecSys/blob/dev/deploy/sql/postgres_data.sql)
+for the table definitions.
+
+Moreover a `modelling` schema is created for automated model evaluation. The
+tables `modelling.evaluations` and `modelling.recommendation_errors` save model
+metrics and recommendation errors. The schema is the following:
+![Modelling Schema](https://github.com/dssg/IEFP-RecSys/blob/dev/docs/modelling_schema.png)
 
 
 ### Run Luigi pipeline
@@ -145,6 +160,15 @@ Run the pipeline with:
 ```bash
 > make luigi
 ```
+
+The total runtime can take up to 20 min. Luigi executes the steps in the following order:
+1. **Extract:** Extract and filter raw data from PostgresSQL and save as parquet files into S3
+2. **Cleaning:** Clean values, specify datatypes, drop duplicates
+3. **Transformation:** Main transformation step into a __Journey_ Table
+4. **Create final modelling table:** Value scaling, Dummy encoding, Target Variable definition, etc.
+5. **Modelling:** Train supervised models (Logistic Regression, Random Forest, Gradient Boosting)
+6. **Evaluation of supervised model:** Save common evaluation metrics, hyperparameters and used features into the PostgresSQL evaluation table
+7. **Evaluation of recommendations:** Produce recommendation for every observation of the test set and evaluate recommendation error against the ground truth.
 
 ### Use the command line:
 ```bash
