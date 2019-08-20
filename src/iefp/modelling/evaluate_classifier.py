@@ -1,12 +1,11 @@
-import pandas as pd
 import luigi
 
 from datetime import datetime
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from iefp.data import model_info_to_db
-from iefp.data import read_object_from_s3
 from iefp.data import get_db_engine
+from iefp.data import s3
 from iefp.modelling import SplitTrainTest
 from iefp.modelling import (
     TrainRandomForest,
@@ -23,16 +22,16 @@ class EvaluateGradientBoosting(luigi.Task):
         return [SplitTrainTest(), TrainGradientBoosting(self.date)]
 
     def run(self):
-        df_test = pd.read_parquet(self.input()[0][1].path)
+        df_test = s3.read_parquet(self.input()[0][1].path)
         y_test = df_test.loc[:, "ttj_sub_12"]
         X_test = df_test.drop(["ttj", "ttj_sub_12"], axis="columns")
 
-        rf = read_object_from_s3(self.input()[1].path)
-        metrics = evaluate(rf, X_test, y_test)
+        gb = s3.read_pickle(self.input()[1].path)
+        metrics = evaluate(gb, X_test, y_test)
 
         model_info_to_db(
             engine=get_db_engine(),
-            model=rf,
+            model=gb,
             metrics=metrics,
             features=X_test.columns.tolist(),
             date=self.date,
@@ -56,11 +55,11 @@ class EvaluateRandomForest(luigi.Task):
         return [SplitTrainTest(), TrainRandomForest(self.date)]
 
     def run(self):
-        df_test = pd.read_parquet(self.input()[0][1].path)
+        df_test = s3.read_parquet(self.input()[0][1].path)
         y_test = df_test.loc[:, "ttj_sub_12"]
         X_test = df_test.drop(["ttj", "ttj_sub_12"], axis="columns")
 
-        rf = read_object_from_s3(self.input()[1].path)
+        rf = s3.read_pickle(self.input()[1].path)
         metrics = evaluate(rf, X_test, y_test)
 
         model_info_to_db(
@@ -89,16 +88,16 @@ class EvaluateLogisticRegression(luigi.Task):
         return [SplitTrainTest(), TrainLogisticRegression(self.date)]
 
     def run(self):
-        df_test = pd.read_parquet(self.input()[0][1].path)
+        df_test = s3.read_parquet(self.input()[0][1].path)
         y_test = df_test.loc[:, "ttj_sub_12"]
         X_test = df_test.drop(["ttj", "ttj_sub_12"], axis="columns")
 
-        rf = read_object_from_s3(self.input()[1].path)
-        metrics = evaluate(rf, X_test, y_test)
+        lg = s3.read_pickle(self.input()[1].path)
+        metrics = evaluate(lg, X_test, y_test)
 
         model_info_to_db(
             engine=get_db_engine(),
-            model=rf,
+            model=lg,
             metrics=metrics,
             features=X_test.columns.tolist(),
             date=self.date,

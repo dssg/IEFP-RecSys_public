@@ -1,9 +1,10 @@
 import luigi
-import pandas as pd
 import yaml
 
 from luigi.contrib.s3 import S3Target
 
+from iefp.data import s3
+from iefp.data.constants import S3
 from iefp.modelling import TranslateInterventions
 
 
@@ -12,15 +13,12 @@ class AddMappings(luigi.Task):
         return TranslateInterventions()
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        s3path = buckets["modelling"]
-
-        return S3Target(s3path + "mappings.parquet")
+        return S3Target(s3.path(S3.MODELLING + "mappings.parquet"))
 
     def run(self):
-        df_intermediate = pd.read_parquet(self.input().path)
+        df_intermediate = s3.read_parquet(self.input().path)
         df_intermediate = self.add_mappings(df_intermediate)
-        df_intermediate.to_parquet(self.output().path)
+        s3.write_parquet(df_intermediate, self.output().path)
 
     def add_mappings(self, df):
         """

@@ -2,7 +2,7 @@ import json
 
 from sqlalchemy import create_engine
 
-from iefp.data import get_postgres_credentials
+from iefp.data import credentials
 from iefp.data.constants import Database
 
 
@@ -12,7 +12,7 @@ def get_db_engine():
 
     :return: Database engine
     """
-    host, name, user, password, port = get_postgres_credentials()
+    host, name, user, password, port = credentials.postgres()
     url = "postgresql://{}:{}@{}:{}/{}".format(user, password, host, port, name)
     engine = create_engine(url, client_encoding="utf8")
 

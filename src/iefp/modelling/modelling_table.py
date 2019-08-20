@@ -4,6 +4,8 @@ import yaml
 
 from luigi.contrib.s3 import S3Target
 
+from iefp.data import s3
+from iefp.data.constants import S3
 from iefp.modelling import AddOutcomes
 
 
@@ -12,13 +14,10 @@ class CreateModellingTable(luigi.Task):
         return AddOutcomes()
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        target_path = buckets["modelling"]
-
-        return S3Target(target_path + "modelling.parquet")
+        return S3Target(s3.path(S3.MODELLING + "modelling.parquet"))
 
     def run(self):
-        df_journeys = pd.read_parquet(self.input().path)
+        df_journeys = s3.read_parquet(self.input().path)
         df_journeys = df_journeys.set_index(["user_id", "journey_count"])
 
         df_interventions = self.dummy_interventions(df_journeys)
@@ -27,7 +26,6 @@ class CreateModellingTable(luigi.Task):
         df_model = df_feats.merge(df_interventions, right_index=True, left_index=True)
 
         # NOTE: Cut-off modeling table at specified time.
-        # Old data influence model performance
         modelling_params = yaml.load(
             open("./conf/base/parameters.yml"), Loader=yaml.FullLoader
         )
@@ -39,7 +37,7 @@ class CreateModellingTable(luigi.Task):
         df_model = self.drop_empty_cols(df_model)
         df_model = self.set_target_variables(df_model)
 
-        df_model.to_parquet(self.output().path)
+        s3.write_parquet(df_model, self.output().path)
 
     def drop_empty_cols(self, df_model):
         """

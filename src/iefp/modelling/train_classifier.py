@@ -1,5 +1,4 @@
 import luigi
-import pandas as pd
 import yaml
 
 from datetime import datetime
@@ -8,7 +7,8 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 
-from iefp.data import write_object_to_s3
+from iefp.data import s3
+from iefp.data.constants import S3
 from iefp.modelling import SplitTrainTest
 
 
@@ -19,16 +19,15 @@ class TrainGradientBoosting(luigi.Task):
         return SplitTrainTest(self.date)
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        target_path = buckets["models"]
-
         return S3Target(
-            target_path
-            + "{date:%Y/%m/%d/gradient_boosting_T%H%M%S.pkl}".format(date=self.date)
+            s3.path(
+                S3.MODELS
+                + "{date:%Y/%m/%d/gradient_boosting_T%H%M%S.pkl}".format(date=self.date)
+            )
         )
 
     def run(self):
-        df_train = pd.read_parquet(self.input()[0].path)
+        df_train = s3.read_parquet(self.input()[0].path)
         y_train = df_train.loc[:, "ttj_sub_12"]
         X_train = df_train.drop(["ttj", "ttj_sub_12"], axis="columns")
 
@@ -37,7 +36,7 @@ class TrainGradientBoosting(luigi.Task):
         ]
         model = self.train_gb_cv(X_train, y_train, scoring_metric="f1", grid=grid)
 
-        write_object_to_s3(model, self.output().path)
+        s3.write_pickle(model, self.output().path)
 
     def train_gb_cv(self, X, y, scoring_metric, grid=dict()):
         """
@@ -65,16 +64,15 @@ class TrainRandomForest(luigi.Task):
         return SplitTrainTest(self.date)
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        target_path = buckets["models"]
-
         return S3Target(
-            target_path
-            + "{date:%Y/%m/%d/random_forest_T%H%M%S.pkl}".format(date=self.date)
+            s3.path(
+                S3.MODELS
+                + "{date:%Y/%m/%d/random_forest_T%H%M%S.pkl}".format(date=self.date)
+            )
         )
 
     def run(self):
-        df_train = pd.read_parquet(self.input()[0].path)
+        df_train = s3.read_parquet(self.input()[0].path)
         y_train = df_train.loc[:, "ttj_sub_12"]
         X_train = df_train.drop(["ttj", "ttj_sub_12"], axis="columns")
 
@@ -83,7 +81,7 @@ class TrainRandomForest(luigi.Task):
         ]
         model = self.train_rf_cv(X_train, y_train, scoring_metric="f1", grid=grid)
 
-        write_object_to_s3(model, self.output().path)
+        s3.write_pickle(model, self.output().path)
 
     def train_rf_cv(self, X, y, scoring_metric, grid=dict()):
         """
@@ -111,16 +109,17 @@ class TrainLogisticRegression(luigi.Task):
         return SplitTrainTest(self.date)
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        target_path = buckets["models"]
-
         return S3Target(
-            target_path
-            + "{date:%Y/%m/%d/logistic_regression_T%H%M%S.pkl}".format(date=self.date)
+            s3.path(
+                S3.MODELS
+                + "{date:%Y/%m/%d/logistic_regression_T%H%M%S.pkl}".format(
+                    date=self.date
+                )
+            )
         )
 
     def run(self):
-        df_train = pd.read_parquet(self.input()[0].path)
+        df_train = s3.read_parquet(self.input()[0].path)
         y_train = df_train.loc[:, "ttj_sub_12"]
         X_train = df_train.drop(["ttj", "ttj_sub_12"], axis="columns")
 
@@ -129,7 +128,7 @@ class TrainLogisticRegression(luigi.Task):
         ]
         model = self.train_rf_cv(X_train, y_train, scoring_metric="f1", grid=grid)
 
-        write_object_to_s3(model, self.output().path)
+        s3.write_pickle(model, self.output().path)
 
     def train_rf_cv(self, X, y, scoring_metric, grid=dict()):
         """

@@ -1,12 +1,12 @@
 import luigi
 from luigi.contrib.s3 import S3Target
-import pandas as pd
 import numpy as np
 import yaml
 
+from iefp.data import s3
+from iefp.data.constants import Interventions, S3
 from iefp.intermediate import AddDemographics
 from iefp.processing import CleanInterventions
-from iefp.data.constants import Interventions
 
 
 class TransformInterventions(luigi.Task):
@@ -14,19 +14,17 @@ class TransformInterventions(luigi.Task):
         return [CleanInterventions(), AddDemographics()]
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        s3path = buckets["intermediate"]["transform"]
-
-        return S3Target(s3path + "intermediate.parquet")
+        return S3Target(s3.path(S3.TRANSFORM + "intermediate.parquet"))
 
     def run(self):
-        df_interventions = pd.read_parquet(self.input()[0].path).reset_index()
+        df_interventions = s3.read_parquet(self.input()[0].path).reset_index()
         df_interventions = self.group_efa(df_interventions)
         df_interventions = self.add_training(df_interventions)
         df_interventions = self.group_training(df_interventions)
         df_interventions = self.filter_interventions(df_interventions)
         df_interventions = self.map_old_new_interventions(df_interventions)
-        df_journeys = pd.read_parquet(self.input()[1].path)
+
+        df_journeys = s3.read_parquet(self.input()[1].path)
         df_output = self.transform_interventions(df_interventions, df_journeys)
 
         # Recount journeys, because we removed journeys in between
@@ -34,7 +32,7 @@ class TransformInterventions(luigi.Task):
         df_output["journey_count"] = df_output.groupby(["user_id"])[
             "journey_count"
         ].cumsum()
-        df_output.to_parquet(self.output().path)
+        s3.write_parquet(df_output, self.output().path)
 
     def group_efa(self, df_interventions):
         """

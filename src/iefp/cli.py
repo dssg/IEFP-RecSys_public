@@ -1,5 +1,4 @@
 import click
-import pandas as pd
 
 from random import random
 
@@ -18,8 +17,8 @@ from iefp.recommendation import get_top_recommendations
 )
 def cli(recommendations, set_size):
     model_path, _, test_path = postgres.get_best_model_paths()
-    df_test = pd.read_parquet(test_path)
-    model = s3.read_object_from_s3(model_path)
+    df_test = s3.read_parquet(test_path)
+    model = s3.read_pickle(model_path)
 
     # Input: Random observation
     observation = df_test.iloc[int(100 * random())]

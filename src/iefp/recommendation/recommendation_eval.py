@@ -5,15 +5,15 @@ import yaml
 from datetime import datetime
 from sklearn.base import BaseEstimator
 
+from iefp.data import s3
 from iefp.data.postgres import (
     get_db_engine,
     get_model_info_by_path,
     write_recommendation_eval,
 )
-from iefp.data.s3 import read_object_from_s3
-from iefp.modelling import EvaluateRandomForest, TrainRandomForest
-from iefp.modelling import EvaluateLogisticRegression, TrainLogisticRegression
 from iefp.modelling import EvaluateGradientBoosting, TrainGradientBoosting
+from iefp.modelling import EvaluateLogisticRegression, TrainLogisticRegression
+from iefp.modelling import EvaluateRandomForest, TrainRandomForest
 from iefp.recommendation import get_top_recommendations
 
 
@@ -29,11 +29,11 @@ class EvaluateRecommendationsGB(luigi.Task):
             "evaluation_params"
         ]
 
-        model = read_object_from_s3(self.input()[0].path)
+        model = s3.read_pickle(self.input()[0].path)
         model_id, test_path, train_path = get_model_info_by_path(self.input()[0].path)
 
-        df_train = pd.read_parquet(train_path)
-        df_test = pd.read_parquet(test_path)
+        df_train = s3.read_parquet(train_path)
+        df_test = s3.read_parquet(test_path)
 
         rec_error = get_aggregate_recommendation_error(
             df_train,
@@ -43,7 +43,6 @@ class EvaluateRecommendationsGB(luigi.Task):
             params["num_recs"],
             params["percent_sample"],
         )
-
         write_recommendation_eval(get_db_engine(), rec_error, model_id, params)
         self.task_complete = True
 
@@ -66,11 +65,11 @@ class EvaluateRecommendationsLG(luigi.Task):
             "evaluation_params"
         ]
 
-        model = read_object_from_s3(self.input()[0].path)
+        model = s3.read_pickle(self.input()[0].path)
         model_id, test_path, train_path = get_model_info_by_path(self.input()[0].path)
 
-        df_train = pd.read_parquet(train_path)
-        df_test = pd.read_parquet(test_path)
+        df_train = s3.read_parquet(train_path)
+        df_test = s3.read_parquet(test_path)
 
         rec_error = get_aggregate_recommendation_error(
             df_train,
@@ -100,11 +99,11 @@ class EvaluateRecommendationsRF(luigi.Task):
             "evaluation_params"
         ]
 
-        model = read_object_from_s3(self.input()[0].path)
+        model = s3.read_pickle(self.input()[0].path)
         model_id, test_path, train_path = get_model_info_by_path(self.input()[0].path)
 
-        df_train = pd.read_parquet(train_path)
-        df_test = pd.read_parquet(test_path)
+        df_train = s3.read_parquet(train_path)
+        df_test = s3.read_parquet(test_path)
 
         rec_error = get_aggregate_recommendation_error(
             df_train,

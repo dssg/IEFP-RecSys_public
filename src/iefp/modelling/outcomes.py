@@ -1,11 +1,11 @@
 import luigi
-import pandas as pd
 import numpy as np
 import yaml
 
 from luigi.contrib.s3 import S3Target
 
-from iefp.data.constants import Movement
+from iefp.data import s3
+from iefp.data.constants import Movement, S3
 from iefp.modelling import AddMappings
 
 
@@ -14,15 +14,12 @@ class AddOutcomes(luigi.Task):
         return AddMappings()
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        target_path = buckets["modelling"]
-
-        return S3Target(target_path + "outcomes.parquet")
+        return S3Target(s3.path(S3.MODELLING + "outcomes.parquet"))
 
     def run(self):
-        df_journeys = pd.read_parquet(self.input().path)
+        df_journeys = s3.read_parquet(self.input().path)
         df_journeys = self.add_outcomes(df_journeys)
-        df_journeys.to_parquet(self.output().path)
+        s3.write_parquet(df_journeys, self.output().path)
 
     def add_outcomes(self, df):
         """returns a journey dataframe with a boolean employment outcome"""

@@ -31,8 +31,16 @@ class Status:
 
 class Database:
     EVALUATION_TABLE = "modelling.evaluations"
-    RECOMMENDATION_ERRORS_TABLE = "modelling.recommendation_errors"
     INTERVENTIONS_EXTRACTION_SIZE = 10000000
     INTERVENTIONS_TABLE = "intervencoes"
     PEDIDOS_EXTRACTION_SIZE = 15000000
     PEDIDOS_TABLE = "pedidos"
+    RECOMMENDATION_ERRORS_TABLE = "modelling.recommendation_errors"
+
+
+class S3:
+    EXTRACT = "extract/"
+    CLEAN = "clean/"
+    TRANSFORM = "transform/"
+    MODELLING = "modelling/"
+    MODELS = "models/"

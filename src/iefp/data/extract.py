@@ -4,8 +4,9 @@ import yaml
 
 from luigi.contrib.s3 import S3Target
 
-from iefp.data.constants import Database
+from iefp.data.constants import Database, S3
 from iefp.data import get_db_engine
+from iefp.data import s3
 
 
 class ExtractPedidos(luigi.Task):
@@ -31,10 +32,7 @@ class ExtractPedidos(luigi.Task):
         concat_parquet(paths, self.output().path)
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        target_path = buckets["intermediate"]["filter"]
-
-        return S3Target(target_path + "pedidos.parquet")
+        return S3Target(s3.path(S3.EXTRACT + "pedidos.parquet"))
 
 
 class ExtractInterventions(luigi.Task):
@@ -60,16 +58,13 @@ class ExtractInterventions(luigi.Task):
         concat_parquet(paths, self.output().path)
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        target_path = buckets["intermediate"]["filter"]
-
-        return S3Target(target_path + "interventions.parquet")
+        return S3Target(s3.path(S3.EXTRACT + "interventions.parquet"))
 
 
 def concat_parquet(paths, s3path):
     dfs = []
     for path in paths:
-        df = pd.read_parquet(path)
+        df = s3.read_parquet(path)
         # NOTE: Convert to datetime seconds because the fastparquet engine
         # can not handle datetime nanoseconds.
         df_dates = df.select_dtypes("datetime")
@@ -78,7 +73,7 @@ def concat_parquet(paths, s3path):
         dfs.append(df)
 
     df = pd.concat(dfs)
-    df.to_parquet(s3path)
+    s3.write_parquet(df, s3path)
 
 
 def query_to_parquet(query, s3path, chunksize):

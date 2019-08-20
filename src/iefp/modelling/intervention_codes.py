@@ -1,8 +1,10 @@
 import luigi
-from luigi.contrib.s3 import S3Target
-import pandas as pd
 import yaml
 
+from luigi.contrib.s3 import S3Target
+
+from iefp.data import s3
+from iefp.data.constants import S3
 from iefp.intermediate import TransformInterventions
 
 
@@ -11,15 +13,12 @@ class TranslateInterventions(luigi.Task):
         return TransformInterventions()
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        s3path = buckets["modelling"]
-
-        return S3Target(s3path + "intervention_translate.parquet")
+        return S3Target(s3.path(S3.TRANSFORM + "interventions_translated.parquet"))
 
     def run(self):
-        df = pd.read_parquet(self.input().path)
+        df = s3.read_parquet(self.input().path)
         df = self.translate_intervention_codes(df)
-        df.to_parquet(self.output().path)
+        s3.write_parquet(df, self.output().path)
 
     def translate_intervention_codes(self, df):
         """

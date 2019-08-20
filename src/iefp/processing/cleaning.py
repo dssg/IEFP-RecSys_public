@@ -1,10 +1,10 @@
 import luigi
 import numpy as np
-import pandas as pd
-import yaml
 
 from luigi.contrib.s3 import S3Target
 
+from iefp.data import s3
+from iefp.data.constants import S3
 from iefp.data.extract import ExtractPedidos, ExtractInterventions
 from iefp.processing.constants import PedidosColumns, InterventionColumns
 
@@ -14,14 +14,12 @@ class CleanPedidos(luigi.Task):
         return ExtractPedidos()
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        target_path = buckets["intermediate"]["clean"]
-        return S3Target(target_path + "pedidos.parquet")
+        return S3Target(s3.path(S3.CLEAN + "pedidos.parquet"))
 
     def run(self):
-        df = pd.read_parquet(self.input().path)
+        df = s3.read_parquet(self.input().path)
         df = clean(df, bool_cols=PedidosColumns.BOOLEAN)
-        df.to_parquet(self.output().path)
+        s3.write_parquet(df, self.output().path)
 
 
 class CleanInterventions(luigi.Task):
@@ -29,14 +27,12 @@ class CleanInterventions(luigi.Task):
         return ExtractInterventions()
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        target_path = buckets["intermediate"]["clean"]
-        return S3Target(target_path + "interventions.parquet")
+        return S3Target(s3.path(S3.CLEAN + "interventions.parquet"))
 
     def run(self):
-        df = pd.read_parquet(self.input().path)
+        df = s3.read_parquet(self.input().path)
         df = clean(df, string_cols=InterventionColumns.STRING)
-        df.to_parquet(self.output().path)
+        s3.write_parquet(df, self.output().path)
 
 
 def clean(df, bool_cols=None, string_cols=None):

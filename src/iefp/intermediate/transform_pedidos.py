@@ -1,10 +1,10 @@
 import luigi
-import pandas as pd
 import yaml
 
 from luigi.contrib.s3 import S3Target
 
-from iefp.data.constants import Category, Movement, RegistrationReason, Status
+from iefp.data import s3
+from iefp.data.constants import Category, Movement, RegistrationReason, S3, Status
 from iefp.processing import CleanPedidos
 
 
@@ -13,15 +13,12 @@ class TransformToJourneys(luigi.Task):
         return CleanPedidos()
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        target_path = buckets["intermediate"]["transform"]
-
-        return S3Target(target_path + "raw_journeys.parquet")
+        return S3Target(s3.path(S3.TRANSFORM + "raw_journeys.parquet"))
 
     def run(self):
-        df = pd.read_parquet(self.input().path)
+        df = s3.read_parquet(self.input().path)
         df = self.transform_journeys(df)
-        df.to_parquet(self.output().path)
+        s3.write_parquet(df, self.output().path)
 
     def transform_journeys(self, df):
         """
@@ -133,15 +130,12 @@ class FilterJourneys(luigi.Task):
         return TransformToJourneys()
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        target_path = buckets["intermediate"]["transform"]
-
-        return S3Target(target_path + "filtered_journeys.parquet")
+        return S3Target(s3.path(S3.TRANSFORM + "filtered_journeys.parquet"))
 
     def run(self):
-        df = pd.read_parquet(self.input().path)
+        df = s3.read_parquet(self.input().path)
         df = self.filter_journeys(df)
-        df.to_parquet(self.output().path)
+        s3.write_parquet(df, self.output().path)
 
     def filter_journeys(self, df):
         """
@@ -166,22 +160,16 @@ class FilterJourneys(luigi.Task):
 
 class AddDemographics(luigi.Task):
     def requires(self):
-        return FilterJourneys()
+        return [CleanPedidos(), FilterJourneys()]
 
     def output(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        target_path = buckets["intermediate"]["transform"]
-
-        return S3Target(target_path + "dem_journeys.parquet")
+        return S3Target(s3.path(S3.TRANSFORM + "filtered_journeys.parquet"))
 
     def run(self):
-        buckets = yaml.load(open("./conf/base/buckets.yml"), Loader=yaml.FullLoader)
-        clean_path = buckets["intermediate"]["clean"]
-
-        df_pedidos = pd.read_parquet(clean_path + "pedidos.parquet")
-        df_journeys = pd.read_parquet(self.input().path)
+        df_pedidos = s3.read_parquet(self.input()[0].path)
+        df_journeys = s3.read_parquet(self.input()[1].path)
         df_journeys = self.add_demographics(df_pedidos, df_journeys)
-        df_journeys.to_parquet(self.output().path)
+        s3.write_parquet(df_journeys, self.output().path)
 
     def add_demographics(self, df_pedidos, df_journey):
         """
