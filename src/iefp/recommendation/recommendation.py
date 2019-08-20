@@ -85,6 +85,6 @@ def calculate_top_interventions(X: pd.DataFrame, y_proba: np.array, n: int):
         rec_interv.append(interventions + [top_n_rec.iloc[i]["true"]])
 
     df_rec_interv = pd.DataFrame(
-        rec_interv, columns=(["intervention"] * 3 + ["probability"])
+        rec_interv, columns=(["intervention"] * n + ["probability"])
     )
     return df_rec_interv
