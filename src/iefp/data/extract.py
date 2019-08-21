@@ -65,8 +65,8 @@ def concat_parquet(paths, s3path):
     dfs = []
     for path in paths:
         df = s3.read_parquet(path)
-        # NOTE: Convert to datetime seconds because the fastparquet engine
-        # can not handle datetime nanoseconds.
+        # NOTE: Convert to datetime seconds because the parquet
+        # engine can not handle datetime nanoseconds.
         df_dates = df.select_dtypes("datetime")
         df_dates = df_dates.astype("datetime64[s]")
         df[df_dates.columns] = df_dates
@@ -82,9 +82,9 @@ def query_to_parquet(query, s3path, chunksize):
     files = list()
     i = 0
     for chunk in pd.read_sql(query, engine, chunksize=chunksize):
-        temp_path = s3path + "_temp{}".format(i)
-        chunk.to_parquet(temp_path)
-        files.append(temp_path)
+        chunk_path = s3path.split(".")[0] + "_chunk{}.parquet".format(i)
+        chunk.to_parquet(chunk_path)
+        files.append(chunk_path)
         i = i + 1
 
     return files
