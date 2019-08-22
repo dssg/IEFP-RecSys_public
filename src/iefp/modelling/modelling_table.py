@@ -14,7 +14,9 @@ class CreateModellingTable(luigi.Task):
         return AddOutcomes()
 
     def output(self):
-        return S3Target(s3.path(S3.MODELLING + "modelling.parquet"))
+        return S3Target(
+            s3.path(S3.MODELLING + "modelling.parquet"), client=s3.create_client()
+        )
 
     def run(self):
         df_journeys = s3.read_parquet(self.input().path)

@@ -14,7 +14,9 @@ class TransformInterventions(luigi.Task):
         return [CleanInterventions(), AddDemographics()]
 
     def output(self):
-        return S3Target(s3.path(S3.TRANSFORM + "intermediate.parquet"))
+        return S3Target(
+            s3.path(S3.TRANSFORM + "intermediate.parquet"), client=s3.create_client()
+        )
 
     def run(self):
         df_interventions = s3.read_parquet(self.input()[0].path).reset_index()

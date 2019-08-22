@@ -13,7 +13,9 @@ class AddMappings(luigi.Task):
         return TranslateInterventions()
 
     def output(self):
-        return S3Target(s3.path(S3.MODELLING + "mappings.parquet"))
+        return S3Target(
+            s3.path(S3.MODELLING + "mappings.parquet"), client=s3.create_client()
+        )
 
     def run(self):
         df_intermediate = s3.read_parquet(self.input().path)

@@ -23,7 +23,8 @@ class TrainGradientBoosting(luigi.Task):
             s3.path(
                 S3.MODELS
                 + "{date:%Y/%m/%d/gradient_boosting_T%H%M%S.pkl}".format(date=self.date)
-            )
+            ),
+            client=s3.create_client(),
         )
 
     def run(self):
@@ -68,7 +69,8 @@ class TrainRandomForest(luigi.Task):
             s3.path(
                 S3.MODELS
                 + "{date:%Y/%m/%d/random_forest_T%H%M%S.pkl}".format(date=self.date)
-            )
+            ),
+            client=s3.create_client(),
         )
 
     def run(self):
@@ -115,7 +117,8 @@ class TrainLogisticRegression(luigi.Task):
                 + "{date:%Y/%m/%d/logistic_regression_T%H%M%S.pkl}".format(
                     date=self.date
                 )
-            )
+            ),
+            client=s3.create_client(),
         )
 
     def run(self):

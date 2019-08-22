@@ -13,7 +13,9 @@ class TransformToJourneys(luigi.Task):
         return CleanPedidos()
 
     def output(self):
-        return S3Target(s3.path(S3.TRANSFORM + "raw_journeys.parquet"))
+        return S3Target(
+            s3.path(S3.TRANSFORM + "raw_journeys.parquet"), client=s3.create_client()
+        )
 
     def run(self):
         df = s3.read_parquet(self.input().path)
@@ -130,7 +132,10 @@ class FilterJourneys(luigi.Task):
         return TransformToJourneys()
 
     def output(self):
-        return S3Target(s3.path(S3.TRANSFORM + "filtered_journeys.parquet"))
+        return S3Target(
+            s3.path(S3.TRANSFORM + "filtered_journeys.parquet"),
+            client=s3.create_client(),
+        )
 
     def run(self):
         df = s3.read_parquet(self.input().path)
@@ -163,7 +168,10 @@ class AddDemographics(luigi.Task):
         return [CleanPedidos(), FilterJourneys()]
 
     def output(self):
-        return S3Target(s3.path(S3.TRANSFORM + "filtered_journeys.parquet"))
+        return S3Target(
+            s3.path(S3.TRANSFORM + "filtered_journeys.parquet"),
+            client=s3.create_client(),
+        )
 
     def run(self):
         df_pedidos = s3.read_parquet(self.input()[0].path)

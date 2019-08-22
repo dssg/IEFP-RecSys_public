@@ -3,6 +3,7 @@ import pickle
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from luigi.contrib.s3 import S3Client
 from s3fs import S3FileSystem
 
 from iefp.data import credentials
@@ -30,14 +31,14 @@ def write_pickle(object_, s3path):
 
 def read_object(s3path):
     bucket, key = split_bucket_key(s3path)
-    s3 = create_client()
+    s3 = boto_client()
     response = s3.get_object(Bucket=bucket, Key=key)
     return response["Body"].read()
 
 
 def write_object(object_, s3path):
     bucket, key = split_bucket_key(s3path)
-    s3 = create_client()
+    s3 = boto_client()
     s3.put_object(Bucket=bucket, Key=key, Body=object_)
 
 
@@ -57,6 +58,12 @@ def bucket():
 
 
 def create_client():
+    key_id, secret, _ = credentials.s3()
+    s3 = S3Client(aws_access_key_id=key_id, aws_secret_access_key=secret)
+    return s3
+
+
+def boto_client():
     key_id, secret, _ = credentials.s3()
     s3 = boto3.client("s3", aws_access_key_id=key_id, aws_secret_access_key=secret)
     return s3

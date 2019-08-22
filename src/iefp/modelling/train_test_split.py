@@ -18,19 +18,23 @@ class SplitTrainTest(luigi.Task):
 
     def output(self):
         return [
-            S3Target(s3.path(S3.MODELLING + "train.parquet")),
-            S3Target(s3.path(S3.MODELLING + "test.parquet")),
+            S3Target(
+                s3.path(S3.MODELLING + "train.parquet"), client=s3.create_client()
+            ),
+            S3Target(s3.path(S3.MODELLING + "test.parquet"), client=s3.create_client()),
             S3Target(
                 s3.path(
                     S3.MODELS
                     + "{date:%Y/%m/%d/train_T%H%M%S.parquet}".format(date=self.date)
-                )
+                ),
+                client=s3.create_client(),
             ),
             S3Target(
                 s3.path(
                     S3.MODELS
                     + "{date:%Y/%m/%d/test_T%H%M%S.parquet}".format(date=self.date)
-                )
+                ),
+                client=s3.create_client(),
             ),
         ]
 

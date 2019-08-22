@@ -14,7 +14,9 @@ class AddOutcomes(luigi.Task):
         return AddMappings()
 
     def output(self):
-        return S3Target(s3.path(S3.MODELLING + "outcomes.parquet"))
+        return S3Target(
+            s3.path(S3.MODELLING + "outcomes.parquet"), client=s3.create_client()
+        )
 
     def run(self):
         df_journeys = s3.read_parquet(self.input().path)

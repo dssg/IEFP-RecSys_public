@@ -14,7 +14,9 @@ class CleanPedidos(luigi.Task):
         return ExtractPedidos()
 
     def output(self):
-        return S3Target(s3.path(S3.CLEAN + "pedidos.parquet"))
+        return S3Target(
+            s3.path(S3.CLEAN + "pedidos.parquet"), client=s3.create_client()
+        )
 
     def run(self):
         df = s3.read_parquet(self.input().path)
@@ -27,7 +29,9 @@ class CleanInterventions(luigi.Task):
         return ExtractInterventions()
 
     def output(self):
-        return S3Target(s3.path(S3.CLEAN + "interventions.parquet"))
+        return S3Target(
+            s3.path(S3.CLEAN + "interventions.parquet"), client=s3.create_client()
+        )
 
     def run(self):
         df = s3.read_parquet(self.input().path)

@@ -13,7 +13,10 @@ class TranslateInterventions(luigi.Task):
         return TransformInterventions()
 
     def output(self):
-        return S3Target(s3.path(S3.TRANSFORM + "interventions_translated.parquet"))
+        return S3Target(
+            s3.path(S3.TRANSFORM + "interventions_translated.parquet"),
+            client=s3.create_client(),
+        )
 
     def run(self):
         df = s3.read_parquet(self.input().path)

@@ -32,7 +32,9 @@ class ExtractPedidos(luigi.Task):
         concat_parquet(paths, self.output().path)
 
     def output(self):
-        return S3Target(s3.path(S3.EXTRACT + "pedidos.parquet"))
+        return S3Target(
+            s3.path(S3.EXTRACT + "pedidos.parquet"), client=s3.create_client()
+        )
 
 
 class ExtractInterventions(luigi.Task):
@@ -58,7 +60,9 @@ class ExtractInterventions(luigi.Task):
         concat_parquet(paths, self.output().path)
 
     def output(self):
-        return S3Target(s3.path(S3.EXTRACT + "interventions.parquet"))
+        return S3Target(
+            s3.path(S3.EXTRACT + "interventions.parquet"), client=s3.create_client()
+        )
 
 
 def concat_parquet(paths, s3path):
@@ -83,7 +87,7 @@ def query_to_parquet(query, s3path, chunksize):
     i = 0
     for chunk in pd.read_sql(query, engine, chunksize=chunksize):
         chunk_path = s3path.split(".")[0] + "_chunk{}.parquet".format(i)
-        chunk.to_parquet(chunk_path)
+        s3.write_parquet(chunk, chunk_path)
         files.append(chunk_path)
         i = i + 1
 
