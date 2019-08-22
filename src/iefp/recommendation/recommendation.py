@@ -37,6 +37,11 @@ def get_top_recommendations(
         df_journey_combinations, y_proba, n
     )
 
+    df_recommendations.columns = [
+        "intervention_" + str(i + 1) for i in range(set_size)
+    ] + ["predicted_probability"]
+    df_recommendations.index = df_recommendations.index + 1
+
     return df_recommendations
 
 
@@ -84,7 +89,5 @@ def calculate_top_interventions(X: pd.DataFrame, y_proba: np.array, n: int):
         )
         rec_interv.append(interventions + [top_n_rec.iloc[i]["true"]])
 
-    df_rec_interv = pd.DataFrame(
-        rec_interv, columns=(["intervention"] * n + ["probability"])
-    )
+    df_rec_interv = pd.DataFrame(rec_interv)
     return df_rec_interv

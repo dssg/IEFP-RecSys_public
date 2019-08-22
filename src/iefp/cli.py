@@ -6,9 +6,7 @@ from iefp.recommendation import get_top_recommendations
 
 
 @click.command(help="IEFP Intervention Recommender.")
-@click.option(
-    "-i", "--journey-id", default=6136, help="Journey User ID of the Job Seeker"
-)
+@click.option("-i", "--journey-id", type=int, help="Journey User ID of the Job Seeker")
 @click.option("-r", "--recommendations", default=10, help="Number of recommendations")
 @click.option(
     "-s",
@@ -36,17 +34,27 @@ def cli(recommendations, set_size, journey_id):
         )
         return
 
-    observation = df_test.loc[journey_id, :]
+    observation = df_test.loc[journey_id, :].copy()
+    observation = observation.drop(["ttj_sub_12", "ttj"])
+    interv_cols = [col for col in observation.index if "i_" in col[:2]]
     dem_cols = [col for col in observation.index if "d_" in col[:2]]
-    output = observation[dem_cols]
+
     click.echo("Journey {} --- Demographics".format(journey_id))
     click.echo("---------------")
-    click.echo("Age: {}".format(round(output["d_age"] * 85)))
+    output = observation[dem_cols]
     click.echo(output[output == 1])
+    # NOTE: Un-normalize age here.
+    # Get maximum age from journey data instead
+    click.echo("Age: {}".format(round(output["d_age"] * 78)))
+    click.echo("---------------")
+    click.echo("Use Model: {}".format(model.__class__.__name__))
+    click.echo("---------------")
+    observation[interv_cols] = 0
+    base_probability = model.predict_proba(observation.to_numpy().reshape(1, -1))
+    click.echo("Base employment probability {:.4f}".format(base_probability[0][1]))
     click.echo("---------------")
     click.echo("Intervention Recommendations".format(journey_id))
     click.echo("---------------")
-    observation = observation.drop(["ttj_sub_12", "ttj"])
     df_recs = get_top_recommendations(
         model, observation, set_size=set_size, n=recommendations
     )
