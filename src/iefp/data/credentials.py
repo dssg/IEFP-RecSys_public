@@ -1,3 +1,4 @@
+from pathlib import Path
 import yaml
 
 
@@ -7,7 +8,9 @@ def postgres():
 
     :return tuple: host, name, user, password, port
     """
-    cred = yaml.load(open("./conf/local/credentials.yml"), Loader=yaml.FullLoader)["db"]
+    rootpath = Path(__file__).absolute().parents[3]
+    path = rootpath / "conf/local/credentials.yml"
+    cred = yaml.load(open(path), Loader=yaml.FullLoader)["db"]
 
     return (
         cred["pg_host"],
@@ -19,11 +22,16 @@ def postgres():
 
 
 def s3():
-    credentials = yaml.load(
-        open("./conf/local/credentials.yml"), Loader=yaml.FullLoader
-    )["aws"]
+    """
+    Reads and return s3 credentials
+
+    :return tuple: key_id, access_key, s3 bucket name
+    """
+    rootpath = Path(__file__).absolute().parents[3]
+    path = rootpath / "conf/local/credentials.yml"
+    creds = yaml.load(open(path), Loader=yaml.FullLoader)["aws"]
     return (
-        credentials["aws_access_key_id"],
-        credentials["aws_secret_access_key"],
-        credentials["s3_bucket_name"],
+        creds["aws_access_key_id"],
+        creds["aws_secret_access_key"],
+        creds["s3_bucket_name"],
     )
