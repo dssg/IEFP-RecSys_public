@@ -1,6 +1,38 @@
 # Parameters to be used in the pipeline
 
-example_test_data_ratio: 0.2
-example_num_train_iter: 10000
-example_learning_rate: 0.01
+data_set:
+  # NOTE: Default value is the start of the extracted dataset
+  start: "2017-01-01"
 
+rf_large_grid:
+  n_estimators: [100, 1000, 10000]
+  max_depth: [2, 3, 5, 10]
+  max_features: ["sqrt", "log2"]
+  min_samples_split: [2, 3, 5, 10]
+  bootstrap: [True, False]
+  criterion: ["gini", "entropy"]
+
+rf_small_grid:
+    n_estimators: [1000]
+    max_depth: [2, 3]
+    min_samples_split: [2, 3]
+
+lg_small_grid:
+    penalty: ["l1", "l2"]
+
+gb_small_grid:
+    learning_rate: [0.01, 0.05, 0.1]
+    max_depth: [2, 3]
+    n_estimators: [1000]
+    subsample: [0.1, 0.5]
+
+gb_large_grid:
+    learning_rate: [0.001, 0.01, 0.05, 0.1, 0.5]
+    max_depth: [1, 3, 5]
+    n_estimators: [100, 1000]
+    subsample: [0.1, 0.5, 1.0]
+
+evaluation_params:
+    set_size: 3
+    num_recs: 1
+    percent_sample: 0.005
