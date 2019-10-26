@@ -201,7 +201,13 @@ exploratory data analysis and fast prototyping. Run it with:
 
 ## Contributors
 
-Rosa Lavelle-Hill, Nathan Coulson, Tobias Richter, Liliana Millán
+Data Science for Social Good Fellows: Rosa Lavelle-Hill, Nathan Coulson, Tobias Richter
+Technical Mentor: Liliana Millán
+Project Manager: Sara Guerreiro
+
+## Credits
+
+This project has been scoped and conceptualized by the Data Science Knowledge Center at Nova School of Business and Economics, Carcavelos, Portugal.
 
 ## License
 
